@@ -41,6 +41,7 @@ class _CounterScreenState extends State<CounterScreen> {
 
   Future<void> _loadData() async {
     final prefs = await SharedPreferences.getInstance();
+
     setState(() {
       counter = prefs.getInt('counter') ?? 0;
       history = prefs.getStringList('history') ?? [];
@@ -50,6 +51,7 @@ class _CounterScreenState extends State<CounterScreen> {
 
   Future<void> _saveData() async {
     final prefs = await SharedPreferences.getInstance();
+
     await prefs.setInt('counter', counter);
     await prefs.setStringList('history', history);
     await prefs.setStringList('afterButton', afterButton);
@@ -58,10 +60,12 @@ class _CounterScreenState extends State<CounterScreen> {
   // Logic khi nhan nut + trigger animation
   void increment() {
     setState(() => counter++);
-    adHistory('+1');
-    adAfterButton(counter);
-    _animatedCounterKey.currentState?.animateUp();
-    _saveData();
+    // counter++;
+    // print(counter);
+    // adHistory('+1');
+    // adAfterButton(counter);
+    // _animatedCounterKey.currentState?.animateUp();
+    // _saveData();
   }
 
   void decrement() {
