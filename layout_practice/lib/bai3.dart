@@ -13,70 +13,204 @@ class bai3 extends StatelessWidget{
           child: const Icon(CupertinoIcons.back, color: CupertinoColors.activeBlue),
           onPressed: () => Navigator.pop(context),
         ),
-        middle: const Text('ROW AND COLUMN COMBINE', style: TextStyle(fontSize: 23)),
+        middle: const Text('ROW AND COLUMN COMBINE', style: TextStyle(fontSize: 23, color: CupertinoColors.activeBlue)),
       ),
       child: Padding(
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.fromLTRB(5,0,5,0),
         child: SafeArea(
           child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-            ),
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
             child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          Color(0xFFF58529), // cam
-                          Color(0xFFFEDA77), // vàng
-                          Color(0xFFDD2A7B), // hồng
-                          Color(0xFF8134AF), // tím
-                          Color(0xFF515BD4), // xanh tím
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      )
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.all(5),
-                        child: CircleAvatar(
-                          radius: 20,
-                          backgroundImage: AssetImage('assets/images/avatar.png'),
-                          b
+                Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(width: 5),
+                        Expanded(
+                            child: Container(
+                              height: 200,
+                              width: 130,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.white,
+                                  border: Border.all(
+                                      width: 4,
+                                      color: CupertinoColors.activeBlue
+                                  )
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.all(3),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text('Container', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: CupertinoColors.activeBlue)),
+                                    Text('1', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: CupertinoColors.activeBlue)),
+                                    Text('Row', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: CupertinoColors.activeBlue)),
+                                    Text('1', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: CupertinoColors.activeBlue)),
+                                  ],
+                                ),
+                              ),
+                            )
+                        ),
+                        SizedBox(width: 5),
+                        Expanded(
+                            child: Container(
+                              height: 200,
+                              width: 130,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.white,
+                                border: Border.all(
+                                  width: 4,
+                                  color: CupertinoColors.activeBlue
+                                )
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.all(3),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text('Container', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: CupertinoColors.activeBlue)),
+                                    Text('2', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: CupertinoColors.activeBlue)),
+                                    Text('Row', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: CupertinoColors.activeBlue)),
+                                    Text('1', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: CupertinoColors.activeBlue)),
+                                  ],
+                                ),
+                              ),
+                            )
+                        ),
+                        SizedBox(width: 5),
+                        Expanded(
+                            child: Container(
+                              height: 200,
+                              width: 130,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.white,
+                                  border: Border.all(
+                                      width: 4,
+                                      color: CupertinoColors.activeBlue
+                                  )
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.all(3),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text('Container', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: CupertinoColors.activeBlue)),
+                                    Text('3', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: CupertinoColors.activeBlue)),
+                                    Text('Row', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: CupertinoColors.activeBlue)),
+                                    Text('1', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: CupertinoColors.activeBlue)),
+                                  ],
+                                ),
+                              ),
+                            )
+                        ),
+                        SizedBox(width: 5)
+                      ],
+                    )
+                ),
+                Expanded(
+                    child: Container(
+                      height: 200,
+                      width: 130,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white,
+                          border: Border.all(
+                              width: 4,
+                              color: CupertinoColors.activeBlue
+                          )
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(3),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text('Container', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: CupertinoColors.activeBlue)),
+                            Text('1', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: CupertinoColors.activeBlue)),
+                            Text('Row', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: CupertinoColors.activeBlue)),
+                            Text('2', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: CupertinoColors.activeBlue)),
+                          ],
                         ),
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Tran Huy Hung', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
-                          Text('1 gio truoc', style: TextStyle(color: Colors.grey),)
-                        ],
-                      )
-                    ],
-                  ),
+                    )
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                      color: Colors.green
-                  ),
-                  child: Text('hello'),
-                ),
-
-                Container(
-                  decoration: BoxDecoration(
-                      color: Colors.blue
-                  ),
-                  child: Text('hello'),
-                ),
+                Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Container(
+                            height: 200,
+                            width: 130,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white,
+                                border: Border.all(
+                                    width: 4,
+                                    color: CupertinoColors.activeBlue
+                                )
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(3),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text('Container', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: CupertinoColors.activeBlue)),
+                                  Text('1', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: CupertinoColors.activeBlue)),
+                                  Text('Row', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: CupertinoColors.activeBlue)),
+                                  Text('3', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: CupertinoColors.activeBlue)),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Expanded(
+                          child: Container(
+                            height: 200,
+                            width: 130,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white,
+                                border: Border.all(
+                                    width: 4,
+                                    color: CupertinoColors.activeBlue
+                                )
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(3),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text('Container', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: CupertinoColors.activeBlue)),
+                                  Text('2', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: CupertinoColors.activeBlue)),
+                                  Text('Row', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: CupertinoColors.activeBlue)),
+                                  Text('3', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: CupertinoColors.activeBlue)),
+                                ],
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    )
+                )
               ],
             ),
-          ),
+          )
         ),
       )
     );

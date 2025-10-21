@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Bai1 extends StatelessWidget {
-  const Bai1({super.key});
+class bai1 extends StatelessWidget {
+  const bai1({super.key});
 
   @override
   Widget build(BuildContext context) {
