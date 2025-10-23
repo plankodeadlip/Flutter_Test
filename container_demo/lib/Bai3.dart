@@ -20,10 +20,12 @@ class bai3 extends StatelessWidget{
               shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
               ),
-              elevation: 0,
+
               child: Container(
                 width: 200,
+
                 decoration: BoxDecoration(
+
                   borderRadius: BorderRadius.circular(15),
                   border: Border.all(
                     width: 3,

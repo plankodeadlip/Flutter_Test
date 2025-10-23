@@ -10,171 +10,162 @@ class bai1 extends StatelessWidget {
       navigationBar: CupertinoNavigationBar(
         leading: CupertinoButton(
           padding: EdgeInsets.zero,
-          child: const Icon(CupertinoIcons.back, color: CupertinoColors.activeBlue),
+          child: const Icon(
+            CupertinoIcons.back,
+            color: CupertinoColors.activeBlue,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         middle: const Text('BASIC ROW', style: TextStyle(fontSize: 25)),
       ),
+
       child: Padding(
         padding: EdgeInsets.all(20),
         child: SafeArea(
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemCount: 6,
-            separatorBuilder:(context, index) => SizedBox(width: 20),
-            itemBuilder: (context, index) {
-              if ( index == 0 ){
-                return Container(
-                  width: 100,
-                  height: 150,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: [Colors.indigo, Colors.blue],begin: AlignmentGeometry.bottomLeft, end: AlignmentGeometry.topRight ),
-                    borderRadius: BorderRadius.circular(15),
-                    border: Border.all(
-                      width: 3,
-                      color: Colors.indigoAccent
-                    )
+          child: Column(
+            children: [
+              Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.all(5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        differentContainer('Main', gradient:LinearGradient(colors:[Colors.deepPurple,Colors.indigo],begin: AlignmentGeometry.topRight, end: AlignmentGeometry.bottomLeft)),
+                        SizedBox(width: 2,),
+                        differentContainer('Axis', gradient:LinearGradient(colors:[Colors.deepPurple,Colors.indigo],begin: AlignmentGeometry.topRight, end: AlignmentGeometry.bottomLeft)),
+                        SizedBox(width: 2,),
+                        differentContainer('Alignment', gradient:LinearGradient(colors:[Colors.deepPurple,Colors.indigo],begin: AlignmentGeometry.topRight, end: AlignmentGeometry.bottomLeft)),
+                        SizedBox(width: 2,),
+                        differentContainer('Start', gradient:LinearGradient(colors:[Colors.deepPurple,Colors.indigo],begin: AlignmentGeometry.topRight, end: AlignmentGeometry.bottomLeft)),
+                      ],
+                    ),
                   ),
-                  child: Padding(padding: EdgeInsets.all(5),
-                    child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                ),
+              SizedBox(height: 5),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.all(5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('Main', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),),
-                      Text('Axis',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
-                      Text('Alignment',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white)),
-                      Text('Start',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
+                      differentContainer('Main', gradient:LinearGradient(colors:[Colors.deepPurple,Colors.indigo],begin: AlignmentGeometry.topRight, end: AlignmentGeometry.bottomLeft)),
+                      SizedBox(width: 2,),
+                      differentContainer('Axis', gradient:LinearGradient(colors:[Colors.deepPurple,Colors.indigo],begin: AlignmentGeometry.topRight, end: AlignmentGeometry.bottomLeft)),
+                      SizedBox(width: 2,),
+                      differentContainer('Alignment', gradient:LinearGradient(colors:[Colors.deepPurple,Colors.indigo],begin: AlignmentGeometry.topRight, end: AlignmentGeometry.bottomLeft)),
+                      SizedBox(width: 2,),
+                      differentContainer('Center', gradient:LinearGradient(colors:[Colors.deepPurple,Colors.indigo],begin: AlignmentGeometry.topRight, end: AlignmentGeometry.bottomLeft)),
                     ],
                   ),
+                ),
+              ),
+              SizedBox(height: 5),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.all(5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      differentContainer('Main', gradient:LinearGradient(colors:[Colors.deepPurple,Colors.indigo],begin: AlignmentGeometry.topRight, end: AlignmentGeometry.bottomLeft)),
+                      SizedBox(width: 2,),
+                      differentContainer('Axis', gradient:LinearGradient(colors:[Colors.deepPurple,Colors.indigo],begin: AlignmentGeometry.topRight, end: AlignmentGeometry.bottomLeft)),
+                      SizedBox(width: 2,),
+                      differentContainer('Alignment', gradient:LinearGradient(colors:[Colors.deepPurple,Colors.indigo],begin: AlignmentGeometry.topRight, end: AlignmentGeometry.bottomLeft)),
+                      SizedBox(width: 2,),
+                      differentContainer('End', gradient:LinearGradient(colors:[Colors.deepPurple,Colors.indigo],begin: AlignmentGeometry.topRight, end: AlignmentGeometry.bottomLeft)),
+                    ],
                   ),
-                );
-              }else if(index == 1){
-                return Container(
-                  width: 100,
-                  height: 150,
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(colors: [Colors.indigo, Colors.blue,Colors.blue,Colors.orange],begin: AlignmentGeometry.bottomLeft, end: AlignmentGeometry.topRight),
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(
-                          width: 3,
-                          color: Colors.indigoAccent
-                      )
+                ),
+              ),
+              SizedBox(height: 5),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.all(5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      differentContainer('Main', gradient:LinearGradient(colors:[Colors.deepPurple,Colors.indigo],begin: AlignmentGeometry.topRight, end: AlignmentGeometry.bottomLeft)),
+                      SizedBox(width: 2,),
+                      differentContainer('Axis', gradient:LinearGradient(colors:[Colors.deepPurple,Colors.indigo],begin: AlignmentGeometry.topRight, end: AlignmentGeometry.bottomLeft)),
+                      SizedBox(width: 2,),
+                      differentContainer('Alignment', gradient:LinearGradient(colors:[Colors.deepPurple,Colors.indigo],begin: AlignmentGeometry.topRight, end: AlignmentGeometry.bottomLeft)),
+                      SizedBox(width: 2,),
+                      differentContainer('Space', gradient:LinearGradient(colors:[Colors.deepPurple,Colors.indigo],begin: AlignmentGeometry.topRight, end: AlignmentGeometry.bottomLeft)),
+                      SizedBox(width: 2,),
+                      differentContainer('Between', gradient:LinearGradient(colors:[Colors.deepPurple,Colors.indigo],begin: AlignmentGeometry.topRight, end: AlignmentGeometry.bottomLeft)),
+                    ],
                   ),
-                  child: Padding(padding: EdgeInsets.all(5),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Main', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
-                        Text('Axis',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
-                        Text('Alignment',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white)),
-                        Text('Center',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
-                      ],
-                    ),
+                ),
+              ),
+              SizedBox(height: 5),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.all(5),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      differentContainer('Main', gradient:LinearGradient(colors:[Colors.deepPurple,Colors.indigo],begin: AlignmentGeometry.topRight, end: AlignmentGeometry.bottomLeft)),
+                      SizedBox(width: 2,),
+                      differentContainer('Axis', gradient:LinearGradient(colors:[Colors.deepPurple,Colors.indigo],begin: AlignmentGeometry.topRight, end: AlignmentGeometry.bottomLeft)),
+                      SizedBox(width: 2,),
+                      differentContainer('Alignment', gradient:LinearGradient(colors:[Colors.deepPurple,Colors.indigo],begin: AlignmentGeometry.topRight, end: AlignmentGeometry.bottomLeft)),
+                      SizedBox(width: 2,),
+                      differentContainer('Space', gradient:LinearGradient(colors:[Colors.deepPurple,Colors.indigo],begin: AlignmentGeometry.topRight, end: AlignmentGeometry.bottomLeft)),
+                      SizedBox(width: 2,),
+                      differentContainer('Around', gradient:LinearGradient(colors:[Colors.deepPurple,Colors.indigo],begin: AlignmentGeometry.topRight, end: AlignmentGeometry.bottomLeft)),
+                    ],
                   ),
-                );
-              }else if(index == 2){
-                return Container(
-                  width: 100,
-                  height: 150,
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(colors: [Colors.blue,Colors.blue,Colors.blue,Colors.blue,Colors.orange,Colors.orange],begin: AlignmentGeometry.bottomLeft, end: AlignmentGeometry.topRight),
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(
-                          width: 3,
-                          color: Colors.indigoAccent
-                      )
+                ),
+              ),
+              SizedBox(height: 5),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.all(5),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      differentContainer('Main', gradient:LinearGradient(colors:[Colors.deepPurple,Colors.indigo],begin: AlignmentGeometry.topRight, end: AlignmentGeometry.bottomLeft)),
+                      SizedBox(width: 2,),
+                      differentContainer('Axis', gradient:LinearGradient(colors:[Colors.deepPurple,Colors.indigo],begin: AlignmentGeometry.topRight, end: AlignmentGeometry.bottomLeft)),
+                      SizedBox(width: 2,),
+                      differentContainer('Alignment', gradient:LinearGradient(colors:[Colors.deepPurple,Colors.indigo],begin: AlignmentGeometry.topRight, end: AlignmentGeometry.bottomLeft)),
+                      SizedBox(width: 2,),
+                      differentContainer('Space', gradient:LinearGradient(colors:[Colors.deepPurple,Colors.indigo],begin: AlignmentGeometry.topRight, end: AlignmentGeometry.bottomLeft)),
+                      SizedBox(width: 2,),
+                      differentContainer('Evenly', gradient:LinearGradient(colors:[Colors.deepPurple,Colors.indigo],begin: AlignmentGeometry.topRight, end: AlignmentGeometry.bottomLeft)),
+                    ],
                   ),
-                  child: Padding(padding: EdgeInsets.all(5),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text('Main', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
-                        Text('Axis',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
-                        Text('Alignment',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white)),
-                        Text('End',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
-                      ],
-                    ),
-                  ),
-                );
-              }else if(index == 3){
-                return Container(
-                  width: 100,
-                  height: 150,
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(colors: [Colors.lightBlue,Colors.blue,Colors.blue,Colors.blue,Colors.orange,Colors.orange, Colors.deepOrange],begin: AlignmentGeometry.bottomLeft, end: AlignmentGeometry.topRight),
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(
-                          width: 3,
-                          color: Colors.indigoAccent
-                      )
-                  ),
-                  child: Padding(padding: EdgeInsets.all(5),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Main', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
-                        Text('Axis',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
-                        Text('Alignment',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white)),
-                        Text('Space',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
-                        Text('Between',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
-                      ],
-                    ),
-                  ),
-                );
-              }else if( index == 4){
-                return Container(
-                  width: 100,
-                  height: 150,
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(colors: [Colors.blue,Colors.blue,Colors.blue,Colors.blue,Colors.orange,Colors.orange,Colors.orange,Colors.orange,Colors.deepOrange, Colors.deepOrange],begin: AlignmentGeometry.bottomLeft, end: AlignmentGeometry.topRight),
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(
-                          width: 3,
-                          color: Colors.indigoAccent
-                      )
-                  ),
-                  child: Padding(padding: EdgeInsets.all(5),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text('Main', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
-                        Text('Axis',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
-                        Text('Alignment',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white)),
-                        Text('Space',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
-                        Text('Around',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
-                      ],
-                    ),
-                  ),
-                );
-              }else if(index == 5) {
-                return Container(
-                  width: 100,
-                  height: 150,
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(colors: [Colors.blue,Colors.blue,Colors.orange,Colors.orange,Colors.orange,Colors.deepOrange, Colors.deepOrange, Colors.red],begin: AlignmentGeometry.bottomLeft, end: AlignmentGeometry.topRight),
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(
-                          width: 3,
-                          color: Colors.indigoAccent
-                      )
-                  ),
-                  child: Padding(padding: EdgeInsets.all(5),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text('Main', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
-                        Text('Axis',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
-                        Text('Alignment',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white)),
-                        Text('Space',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
-                        Text('Evenly',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
-                      ],
-                    ),
-                  ),
-                );
-              }
-            },
-          )
+                ),
+              ),
+            ],
+          ),
         ),
-      )
+      ),
+    );
+  }
+
+  Widget differentContainer(String text, {Gradient? gradient}) {
+    return Container(
+      padding: const EdgeInsets.all(2),
+      decoration: BoxDecoration(
+        gradient: gradient, // 👈 Dùng gradient nếu có
+        color: gradient == null
+            ? Colors.indigo // 👈 fallback: nếu không có gradient thì dùng màu này
+            : null,
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(width: 3, color: Colors.indigoAccent),
+      ),
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 18,
+          color: Colors.white,
+        ),
+      ),
     );
   }
 }

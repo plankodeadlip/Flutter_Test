@@ -168,9 +168,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
           onPressed: () => buttonClick(text),
           style: ButtonStyle(
             splashFactory: NoSplash.splashFactory, // 🔹 Tắt hiệu ứng vàng
-            overlayColor: WidgetStateProperty.all(
-              Colors.transparent,
-            ), // 🔹 Không đổi màu khi nhấn
+             // 🔹 Không đổi màu khi nhấn
             padding: WidgetStateProperty.all(
               const EdgeInsets.symmetric(vertical: 22),
             ),

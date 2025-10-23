@@ -83,7 +83,7 @@ class _bai5LoginState extends State<bai5Login> {
                           child: CupertinoTextField(
                             placeholder: 'Password',
                             padding: EdgeInsets.all(16),
-                            obscureText: true,
+                            obscureText: false,
                             decoration: BoxDecoration(
                               border: Border.all(
                                 width: 4,

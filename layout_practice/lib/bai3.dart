@@ -19,8 +19,7 @@ class bai3 extends StatelessWidget{
         padding: EdgeInsets.fromLTRB(5,0,5,0),
         child: SafeArea(
           child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
+
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -120,8 +119,7 @@ class bai3 extends StatelessWidget{
                 ),
                 Expanded(
                     child: Container(
-                      height: 200,
-                      width: 130,
+
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           color: Colors.white,

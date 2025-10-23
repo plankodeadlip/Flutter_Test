@@ -7,6 +7,7 @@ class bai1 extends StatelessWidget{
   Widget build(BuildContext context) {
     return SizedBox(
       height: 160,
+
       child: ListView.separated(
         padding: EdgeInsets.fromLTRB(25, 15, 20, 15),
         separatorBuilder: (context, index) => SizedBox(width: 5,),
@@ -16,6 +17,7 @@ class bai1 extends StatelessWidget{
           if (index == 0) {
             return Container(
               width: 120,
+
               decoration: BoxDecoration(
                 color: Colors.red,
               ),

@@ -187,6 +187,8 @@ class bai2 extends StatelessWidget {
                         fit: BoxFit.cover,
                       ),
                       Positioned.fill(
+
+
                         child: BackdropFilter(
                           filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
                           child: Container(color: Colors.transparent),

@@ -149,119 +149,119 @@ class _bai5EComerceState extends State<bai5EComerce> {
         ),
       ),
       child: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // 🔹 THANH TÌM KIẾM
-              Padding(
-                padding: EdgeInsets.all(16),
-                child: CupertinoSearchTextField(
-                  placeholder: 'Search for racquets...',
-                ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // 🔹 THANH TÌM KIẾM
+            Padding(
+              padding: EdgeInsets.all(16),
+              child: CupertinoSearchTextField(
+                placeholder: 'Search for racquets...',
               ),
+            ),
 
-              // 🔹 DANH MỤC CUỘN NGANG
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      categoryCard(
-                        'SWEETSPOT',
-                        CupertinoIcons.wand_stars,
-                        CupertinoColors.destructiveRed,
-                      ),
-                      SizedBox(width: 12),
-                      categoryCard(
-                        'AMG',
-                        Icons.account_balance_wallet,
-                        CupertinoColors.black,
-                      ),
-                      SizedBox(width: 12),
-                      categoryCard(
-                        'ABS',
-                        Icons.accessible_forward,
-                        CupertinoColors.systemOrange,
-                      ),
-                      SizedBox(width: 12),
-                      categoryCard(
-                        'PLATINUM',
-                        Icons.accessible_forward,
-                        Colors.greenAccent,
-                      ),
-                      SizedBox(width: 12),
-                      categoryCard(
-                        'VORTEX',
-                        CupertinoIcons.rhombus,
-                        Colors.deepPurple,
-                      ),
-                      SizedBox(width: 12),
-                      categoryCard(
-                        'NANO',
-                        CupertinoIcons.eye_slash,
-                        Colors.pink,
-                      ),
-                      categoryCard(
-                        'OTHERS',
-                        CupertinoIcons.delete_simple,
-                        CupertinoColors.systemGrey,
-                      ),
-                      SizedBox(width: 12),
-                    ],
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 24),
-
-              // 🔹 TIÊU ĐỀ
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
+            // 🔹 DANH MỤC CUỘN NGANG
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    CupertinoButton(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      onPressed: showHotRacquet,
-                      child: const Text(
-                        'HOT RACQUET',
-                        style: TextStyle(
-                          color: CupertinoColors.systemRed,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
-                      ),
+                    categoryCard(
+                      'SWEETSPOT',
+                      CupertinoIcons.wand_stars,
+                      CupertinoColors.destructiveRed,
                     ),
-                    CupertinoButton(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      onPressed: showAll,
-                      child: const Text(
-                        'All',
-                        style: TextStyle(
-                          color: CupertinoColors.activeBlue,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
-                      ),
+                    SizedBox(width: 12),
+                    categoryCard(
+                      'AMG',
+                      Icons.account_balance_wallet,
+                      CupertinoColors.black,
                     ),
+                    SizedBox(width: 12),
+                    categoryCard(
+                      'ABS',
+                      Icons.accessible_forward,
+                      CupertinoColors.systemOrange,
+                    ),
+                    SizedBox(width: 12),
+                    categoryCard(
+                      'PLATINUM',
+                      Icons.accessible_forward,
+                      Colors.greenAccent,
+                    ),
+                    SizedBox(width: 12),
+                    categoryCard(
+                      'VORTEX',
+                      CupertinoIcons.rhombus,
+                      Colors.deepPurple,
+                    ),
+                    SizedBox(width: 12),
+                    categoryCard(
+                      'NANO',
+                      CupertinoIcons.eye_slash,
+                      Colors.pink,
+                    ),
+                    categoryCard(
+                      'OTHERS',
+                      CupertinoIcons.delete_simple,
+                      CupertinoColors.systemGrey,
+                    ),
+                    SizedBox(width: 12),
                   ],
                 ),
               ),
+            ),
 
-              const SizedBox(height: 8),
+            const SizedBox(height: 24),
 
-              // 🔹 GRID SẢN PHẨM
-              GridView.builder(
+            // 🔹 TIÊU ĐỀ
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CupertinoButton(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    onPressed: showHotRacquet,
+                    child: const Text(
+                      'HOT RACQUET',
+                      style: TextStyle(
+                        color: CupertinoColors.systemRed,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                  CupertinoButton(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    onPressed: showAll,
+                    child: const Text(
+                      'All',
+                      style: TextStyle(
+                        color: CupertinoColors.activeBlue,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 8),
+
+            // 🔹 GRID SẢN PHẨM
+            Expanded(
+              child: GridView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   crossAxisSpacing: 8,
                   mainAxisSpacing: 8,
-                  childAspectRatio: 0.59,
+                  childAspectRatio: 0.61
                 ),
                 itemCount: displayedProducts.length,
                 itemBuilder: (context, index) {
@@ -278,10 +278,10 @@ class _bai5EComerceState extends State<bai5EComerce> {
                   );
                 },
               ),
+            ),
 
-              const SizedBox(height: 16),
-            ],
-          ),
+            const SizedBox(height: 16),
+          ],
         ),
       ),
     );
@@ -342,112 +342,113 @@ class _bai5EComerceState extends State<bai5EComerce> {
           onPressed: () {},
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
             children: [
               // 🖼 Ảnh sản phẩm
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.asset(
-                    imagePath,
-                    width: 140,
-                    height: 160,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      print('❌ Error loading image: $error');
-                      return Container(
-                        height: 140,
-                        width: 140,
-                        decoration: BoxDecoration(
-                          color: CupertinoColors.systemGrey4,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Icon(
-                          CupertinoIcons.photo,
-                          size: 40,
-                          color: CupertinoColors.systemGrey3,
-                        ),
-                      );
-                    },
+              Expanded(
+                flex: 6,
+                child: Padding(
+                  padding: EdgeInsets.all(10),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.asset(
+                      imagePath,
+                      width: 140,
+                      height: 160,
+                      fit: BoxFit.contain,
+                      errorBuilder: (context, error, stackTrace) {
+                        print('❌ Error loading image: $error');
+                        return Container(
+                          height: 140,
+                          width: 140,
+                          decoration: BoxDecoration(
+                            color: CupertinoColors.systemGrey4,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Icon(
+                            CupertinoIcons.photo,
+                            size: 40,
+                            color: CupertinoColors.systemGrey3,
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),
 
               // 📄 Nội dung sản phẩm
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 8,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      name,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: CupertinoColors.label,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 4),
-
-                    // 💰 Giá
-                    Text(
-                      price,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: CupertinoColors.systemRed,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      description,
-                      style: const TextStyle(
-                        color: CupertinoColors.systemGrey,
-                        fontSize: 12,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 6),
-
-                    // ⭐ Review
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const Icon(
-                          CupertinoIcons.star_fill,
-                          color: CupertinoColors.systemYellow,
-                          size: 14,
+              Expanded(
+                flex: 4,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 8,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        name,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: CupertinoColors.label,
                         ),
-                        const SizedBox(width: 3),
-                        Text(
-                          '($reviews)',
-                          style: const TextStyle(
-                            color: CupertinoColors.systemGrey,
-                            fontSize: 12,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        price,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: CupertinoColors.systemRed,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        description,
+                        style: const TextStyle(
+                          color: CupertinoColors.systemGrey,
+                          fontSize: 12,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 6),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const Icon(
+                            CupertinoIcons.star_fill,
+                            color: CupertinoColors.systemYellow,
+                            size: 14,
                           ),
-                        ),
-                        Spacer(),
-                        const Padding(
-                          padding: EdgeInsets.only(bottom: 6),
-                          child: Icon(
-                            CupertinoIcons.heart,
-                            color: CupertinoColors.systemGrey2,
-                            size: 26,
+                          const SizedBox(width: 3),
+                          Text(
+                            '($reviews)',
+                            style: const TextStyle(
+                              color: CupertinoColors.systemGrey,
+                              fontSize: 12,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                          Spacer(),
+                           Padding(
+                            padding: EdgeInsets.only(bottom: 6),
+                            child: Icon(
+                              CupertinoIcons.heart,
+                              color: CupertinoColors.systemGrey2,
+                              size: 26,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-
-              // ❤️ Icon yêu thích
             ],
           ),
         ),

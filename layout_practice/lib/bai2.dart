@@ -10,124 +10,141 @@ class bai2 extends StatelessWidget {
       navigationBar: CupertinoNavigationBar(
         leading: CupertinoButton(
           padding: EdgeInsets.zero,
-          child: const Icon(CupertinoIcons.back, color: CupertinoColors.activeBlue),
+          child: const Icon(
+            CupertinoIcons.back,
+            color: CupertinoColors.activeBlue,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         middle: const Text('BASIC COLUMN', style: TextStyle(fontSize: 25)),
       ),
-      child:Padding(
+      child: Padding(
         padding: EdgeInsets.all(20),
         child: SafeArea(
-          child: ListView.separated(
-            scrollDirection: Axis.vertical,
-            separatorBuilder: (context, index)=>SizedBox(height: 10),
-            itemCount: 4,
-            itemBuilder: (context, index) {
-              if (index ==0){
-                return Container(
-                  width: 250,
-                  height: 250,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        colors: [Color.fromARGB(222, 98, 98,1), Color.fromARGB(255, 184, 140,1)],
-                      begin: Alignment.bottomLeft,
-                      end: Alignment.topRight,
-                    ),
-                    borderRadius: BorderRadius.circular(20)
-                  ),
-                  child: Padding(padding: EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Cross', style: TextStyle(color: Colors.yellowAccent, fontWeight:FontWeight.bold, fontSize: 30)),
-                        Text('Axis',style: TextStyle(color: Colors.yellowAccent, fontWeight:FontWeight.bold, fontSize: 30)),
-                        Text('Alignment',style: TextStyle(color: Colors.yellowAccent, fontWeight:FontWeight.bold, fontSize: 30)),
-                        Text('Start',style: TextStyle(color: Colors.yellowAccent, fontWeight:FontWeight.bold, fontSize: 30)),
-                      ],
-                    ),
-                  ),
-                );
-              }else if(index == 1){
-                return Container(
-                  width: 250,
-                  height: 250,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Color.fromARGB(218, 226, 248,1), Color.fromARGB(214, 164, 164,1)],
-                      begin: Alignment.bottomLeft,
-                      end: Alignment.topRight,
-                    ),
-                    borderRadius: BorderRadius.circular(20)
-                  ),
-                  child: Padding(padding: EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text('Cross', style: TextStyle(color: Color(0xFF4B3832), fontWeight:FontWeight.bold, fontSize: 30)),
-                        Text('Axis',style: TextStyle(color: Color(0xFF4B3832), fontWeight:FontWeight.bold, fontSize: 30)),
-                        Text('Alignment',style: TextStyle(color: Color(0xFF4B3832), fontWeight:FontWeight.bold, fontSize: 30)),
-                        Text('Center',style: TextStyle(color: Color(0xFF4B3832), fontWeight:FontWeight.bold, fontSize: 30)),
-                        ],
-                    ),
-                  )
-                );
-              }else if(index == 2){
-                return Container(
-                  width: 250,
-                  height: 250,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Color.fromARGB(72, 0, 72, 1), Color.fromARGB(192, 72, 72, 1)],
-                      begin: Alignment.bottomLeft,
-                      end: Alignment.topRight,
-                    ),
-                    borderRadius: BorderRadius.circular(20)
-                  ),
-                  child: Padding(padding: EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text('Cross', style: TextStyle(color: Color(0xFFB3E5FC), fontWeight:FontWeight.bold, fontSize: 30)),
-                        Text('Axis',style: TextStyle(color: Color(0xFFB3E5FC), fontWeight:FontWeight.bold, fontSize: 30)),
-                        Text('Alignment',style: TextStyle(color: Color(0xFFB3E5FC), fontWeight:FontWeight.bold, fontSize: 30)),
-                        Text('End',style: TextStyle(color: Color(0xFFB3E5FC), fontWeight:FontWeight.bold, fontSize: 30)),
-                      ],
-                    ),
-                  )
-                );
-              }else if(index == 3){
-                return Container(
-                  width: 250,
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [Color.fromARGB(220, 40, 36, 1), Color.fromARGB(74, 86, 157, 1)],
-                        begin: Alignment.bottomLeft,
-                        end: Alignment.topRight,
+          child: Row(
+            children: [
+              Expanded(child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.deepOrange,
+                          border: Border.all(
+                              width: 3,
+                              color: Colors.yellowAccent
+                          )
                       ),
-                      borderRadius: BorderRadius.circular(20)
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+
+                        children: [
+                          differentContainer('Cross'),
+                          differentContainer('Axis'),
+                          differentContainer('Alignment'),
+                          differentContainer('Start'),
+                        ],
+                      ),
+                    ),
                   ),
-                    child: Padding(padding: EdgeInsets.all(20),
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.deepOrange,
+                          border: Border.all(
+                              width: 3,
+                              color: Colors.yellowAccent
+                          )
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          differentContainer('Cross'),
+                          differentContainer('Axis'),
+                          differentContainer('Alignment'),
+                          differentContainer('Center'),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              )),
+              Expanded(child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.deepOrange,
+                          border: Border.all(
+                              width: 3,
+                              color: Colors.yellowAccent
+                          )
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          differentContainer('Cross'),
+                          differentContainer('Axis'),
+                          differentContainer('Alignment'),
+                          differentContainer('End'),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.deepOrange,
+                          border: Border.all(
+                              width: 3,
+                              color: Colors.yellowAccent
+                          )
+                      ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Text('Cross', style: TextStyle(color: Color(0xFFFFD700), fontWeight:FontWeight.bold, fontSize: 30)),
-                          Text('Axis',style: TextStyle(color: Color(0xFFFFD700), fontWeight:FontWeight.bold, fontSize: 30)),
-                          Text('Alignment',style: TextStyle(color: Color(0xFFFFD700), fontWeight:FontWeight.bold, fontSize: 30)),
-                          Text('Stretch',style: TextStyle(color: Color(0xFFFFD700), fontWeight:FontWeight.bold, fontSize: 30)),
-                          Text('Will',style: TextStyle(color: Color(0xFFFFD700), fontWeight:FontWeight.bold, fontSize: 30)),
-                          Text('Stretch',style: TextStyle(color: Color(0xFFFFD700), fontWeight:FontWeight.bold, fontSize: 30)),
-                          Text('Fitting',style: TextStyle(color: Color(0xFFFFD700), fontWeight:FontWeight.bold, fontSize: 30)),
-                          Text('All',style: TextStyle(color: Color(0xFFFFD700), fontWeight:FontWeight.bold, fontSize: 30)),
-                          Text('Line',style: TextStyle(color: Color(0xFFFFD700), fontWeight:FontWeight.bold, fontSize: 30)),
+                          differentContainer('Cross'),
+                          differentContainer('Axis'),
+                          differentContainer('Alignment'),
+                          differentContainer('Stretch'),
                         ],
                       ),
-                    )
-                );
-              }
-            }
-          )
+                    ),
+                  ),
+                ],
+              )),
+            ],
+          ),
         ),
-      )
+      ),
+    );
+  }
+
+  Widget differentContainer(String text, {Gradient? gradient}) {
+    return Container(
+      padding: const EdgeInsets.all(2),
+      decoration: BoxDecoration(
+        gradient: gradient, // 👈 Dùng gradient nếu có
+        color: gradient == null
+            ? Colors
+                  .indigo // 👈 fallback: nếu không có gradient thì dùng màu này
+            : null,
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(width: 3, color: Colors.indigoAccent),
+      ),
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 18,
+          color: Colors.white,
+        ),
+      ),
     );
   }
 }
