@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class bai2InternetImage extends StatelessWidget {
   const bai2InternetImage({super.key});
@@ -8,7 +9,7 @@ class bai2InternetImage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_ios_new_outlined,
             color: Colors.blue,
             size: 30,
@@ -17,7 +18,7 @@ class bai2InternetImage extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
-        title: Text(
+        title: const Text(
           'INTERNET IMAGE',
           style: TextStyle(
             fontSize: 30,
@@ -30,22 +31,24 @@ class bai2InternetImage extends StatelessWidget {
       body: SafeArea(
         child: Center(
           child: Padding(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 internetImageDisplay(
                   'https://i.pinimg.com/736x/63/d4/09/63d4098b2472d816d6de0076f2b9723a.jpg',
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 internetImageDisplay(
-'https://i.pinimg.com/736x/f8/a4/32/f8a432ff295e5b80c815769f787bfd2b.jpg'                ),
-                SizedBox(height: 10),
+                  'https://i.pinimg.com/736x/f8/a4/32/f8a432ff295e5b80c815769f787bfd2b.jpg',
+                ),
+                const SizedBox(height: 10),
                 internetImageDisplay(
-'https://i.pinimg.com/1200x/7a/b8/6b/7ab86b74315af9b72f54530a62ac2162.jpg'                ),
-                SizedBox(height: 10),
+                  'https://i.pinimg.com/1200x/7a/b8/6b/7ab86b74315af9b72f54530a62ac2162.jpg',
+                ),
+                const SizedBox(height: 10),
               ],
             ),
           ),
@@ -54,6 +57,7 @@ class bai2InternetImage extends StatelessWidget {
     );
   }
 
+  /// Hàm hiển thị ảnh Internet có hiệu ứng fade-in + cache
   Widget internetImageDisplay(String imagePath) {
     return Expanded(
       child: Container(
@@ -63,38 +67,31 @@ class bai2InternetImage extends StatelessWidget {
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
-          child: Image.network(
-            imagePath,
-            fit: BoxFit.cover, // Cắt ảnh vừa khung
-            width: 300,
-            height: 200,
-            // Khi ảnh đang tải
-            loadingBuilder: (context, child, loadingProgress) {
-              if (loadingProgress == null) return child; // Ảnh đã load xong
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const CircularProgressIndicator(),
-                    const SizedBox(height: 10),
-                    Text(
-                      'Đang tải ảnh...',
-                      style: TextStyle(color: Colors.grey[700]),
-                    ),
-                  ],
-                ),
-              );
-            },
-            errorBuilder: (context, error, stackTrace) {
-              return Column(
+          child: CachedNetworkImage(
+            imageUrl: imagePath,
+            fit: BoxFit.cover,
+            fadeInDuration: const Duration(milliseconds: 500), // Hiệu ứng mờ dần
+            placeholder: (context, url) => Center(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.error_outline, color: Colors.red, size: 48),
-                  const SizedBox(height: 8),
-                  const Text('Không thể tải ảnh'),
+                children: const [
+                  CircularProgressIndicator(),
+                  SizedBox(height: 10),
+                  Text(
+                    'Đang tải ảnh...',
+                    style: TextStyle(color: Colors.grey),
+                  ),
                 ],
-              );
-            },
+              ),
+            ),
+            errorWidget: (context, url, error) => const Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.error_outline, color: Colors.red, size: 48),
+                SizedBox(height: 8),
+                Text('Không thể tải ảnh'),
+              ],
+            ),
           ),
         ),
       ),

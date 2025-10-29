@@ -31,6 +31,25 @@ class _bai5SocialMediaButtonState extends State<bai5SocialMediaButton> {
     });
   }
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    onstart();
+  }
+
+  void onstart() {
+    // Schedule the SnackBar to be shown after the first frame
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Welcome! This is a SnackBar from initState.'),
+          duration: Duration(seconds: 3),
+        ),
+      );
+    });
+  }
+
   void cmtClicked() {
     setState(() {
       showTextField = !showTextField;
@@ -66,6 +85,7 @@ class _bai5SocialMediaButtonState extends State<bai5SocialMediaButton> {
 
   @override
   Widget build(BuildContext context) {
+    onstart();
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
