@@ -99,14 +99,14 @@ class _AddTodoDialogState extends State<AddTodoDialog> {
                 label: 'Tiêu đề',
                 required: true,
                 validator: (value) =>
-                    value == null || value.isEmpty ? 'Nhập tiêu đề' : null,
+                    value?.trim() == null || value!.trim().isEmpty ? 'Nhập tiêu đề' : null,
                 onChanged: (value) => _title = value,
               ),
               const SizedBox(height: 10),
 
               LabeledTextField(
                 validator: (value) =>
-                _dueDate == null ? 'vui lòng nhập mô tả' : null,
+                value?.trim() == null || value!.trim().isEmpty ? 'vui lòng nhập mô tả' : null,
                 label: 'Mô tả',
                 required: true,
                 onChanged: (value) => _description = value,

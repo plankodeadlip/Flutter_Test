@@ -109,6 +109,7 @@ class _TodoListItemState extends State<TodoListItem> {
 
     if (isExpanded) {
       // nếu mở rộng, hiển thị toàn bộ mô tả (ngắt dòng mỗi 20 ký tự)
+
       final buffer = StringBuffer();
       for (int i = 0; i < todo.description.length; i += maxChars) {
         int end = (i + maxChars < todo.description.length)

@@ -125,11 +125,25 @@ class _ToDoScreenState extends State<ToDoScreen> {
   @override
   Widget build(BuildContext context) {
     final filteredList = _toDo.where((t) {
-      final matchesTab = switch (onActiveTab) {
-        'all' => true,
-        'done' => t.isCompleted,
-        _ => !t.isCompleted,
-      };
+      //final matchesTab =
+      // switch (onActiveTab) {
+      //   'all' => true,
+      //   'done' => t.isCompleted,
+      //   _ => !t.isCompleted,
+      // };
+
+      bool matchesTab = false;
+      switch(onActiveTab){
+        case 'all':
+          matchesTab = true;
+          break;
+        case 'done':
+          matchesTab = t.isCompleted;
+          break;
+        default:
+          matchesTab = !t.isCompleted;
+
+      }
 
       final matchesSearch =
           t.title.toLowerCase().contains(searchQuery) ||
