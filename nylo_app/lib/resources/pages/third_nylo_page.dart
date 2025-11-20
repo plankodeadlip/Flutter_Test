@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/resources/pages/second_nylo_page.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 import '../../app/controllers/home_controller_controller.dart';
 import '../../app/events/eventHandler.dart';
 
 class SettingPage extends NyStatefulWidget<HomeControllerController> {
-  SettingPage({super.key});
+
+  static RouteView path = ("/setting", (_) => SettingPage());
+
+  SettingPage({super.key}) : super(child: () => _SettingPageState());
 
   @override
   createState() => _SettingPageState();
@@ -85,7 +89,7 @@ class _SettingPageState extends NyPage<SettingPage> {
                     widget.controller.counterIncrease();
                       updateState((){
                       });
-                      routeTo("/second", data: {"name": "Trần Huy Hùng"});},
+                      routeTo(ProfilePage.path, data: {"name": "Trần Huy Hùng"});},
                   style: ElevatedButton.styleFrom(padding: EdgeInsets.zero),
                   child: Container(
                     padding: EdgeInsets.all(20),

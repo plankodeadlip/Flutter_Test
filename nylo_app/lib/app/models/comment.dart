@@ -29,139 +29,109 @@ class Comment extends Model {
 
   @override
   Map<String, dynamic> toJson() => {
-        "postId": postId,
-        "id": id,
-        "name": name,
-        "email": email,
-        "body": body,
-      };
+    "postId": postId,
+    "id": id,
+    "name": name,
+    "email": email,
+    "body": body,
+  };
 
   @override
   String toString() {
     return 'Comment{postId:$postId, id: $id, name:$name, email: $email, body: $body}';
   }
 
-  static Future<List<Comment>> getCommentsByPostId(int postId) async {
+  /// Fetch comments for a single post (with built-in caching check)
+  static Future<List<Comment>> getCommentsByPostId(
+      int postId, {
+        Map<int, List<Comment>>? cache,
+      }) async {
+    // Check cache first
+    if (cache != null && cache.containsKey(postId)) {
+      NyLogger.info("🎯 Cache hit for postId=$postId");
+      return cache[postId]!;
+    }
+
     try {
       final api = ApiService();
+      final response = await api.getComments(postId: postId);
 
-      final response = await api.getComments(
-        postId: postId,
-        onSuccess: (data) {
-          NyLogger.info("✅ Fetched ${data.length} comments for post $postId");
-        },
-        onFailure: (message) {
-          NyLogger.error("❌ Failed to load comments: $message");
-        },
-      );
-
-      if (response.isNotEmpty) {
-        // Chuyển JSON sang Comment
-        final comments = response.map((e) => Comment.fromJson(e)).toList();
-        // Lọc chỉ những comment có postId đúng
-        final filteredComments = comments.where((c) => c.postId == postId).toList();
-
-        NyLogger.info("ℹ️ After filtering, ${filteredComments.length} comments belong to postId=$postId");
-
-        return filteredComments;
+      if (response.isEmpty) {
+        NyLogger.info("ℹ️ No comments found for postId=$postId");
+        return [];
       }
 
-      return [];
+      // Direct mapping without redundant filtering
+      final comments = response
+          .map((json) => Comment.fromJson(json))
+          .toList();
+
+      NyLogger.info("✅ Loaded ${comments.length} comments for postId=$postId");
+
+      // Update cache if provided
+      if (cache != null) {
+        cache[postId] = comments;
+      }
+
+      return comments;
     } catch (e) {
       NyLogger.error("❌ Error fetching comments for post $postId: $e");
       return [];
     }
   }
 
-  // Trong class Comment (thêm các hàm sau)
+  /// Load comments for multiple posts in parallel (batch loading)
+  static Future<Map<int, List<Comment>>> loadCommentsForPosts(
+      List<int> postIds, {
+        Map<int, List<Comment>>? existingCache,
+      }) async {
+    final cache = existingCache ?? <int, List<Comment>>{};
 
+    // Filter out already cached posts
+    final uncachedPostIds = postIds
+        .where((id) => !cache.containsKey(id))
+        .toSet()
+        .toList();
 
-  // ---------------------------------------------------
-//  SEARCH HANDLING (LOGIC MỚI)
-// ---------------------------------------------------
-
-  /// Tải comment chi tiết cho 1 post NẾU CHƯA TẢI
-  static Future<void> loadCommentsForPost(int postId, Map<int, List<Comment>> commentsCache) async {
-    // Nếu đã tải rồi thì bỏ qua
-    if (commentsCache.containsKey(postId) && commentsCache[postId]!.isNotEmpty) {
-      return;
+    if (uncachedPostIds.isEmpty) {
+      NyLogger.info("✅ All posts already cached");
+      return cache;
     }
 
-    try {
-      NyLogger.info("🔄 (Comment.load) Đang tải comments cho post $postId...");
-      final comments = await getCommentsByPostId(postId);
-      commentsCache[postId] = comments;
-    } catch (e) {
-      NyLogger.error("❌ (Comment.load) Lỗi khi tải comments cho post $postId: $e");
-      commentsCache[postId] = [];
-    }
-  }
+    NyLogger.info("⚡️ Loading comments for ${uncachedPostIds.length} posts in parallel...");
 
-
-  /// 2. Tìm kiếm chính: Tải tất cả comment và trả về ID của các Post có comment khớp
-  static Future<Set<int>> searchPostsByComment({
-    required String query,
-    required List<Post> allPosts,
-    required Map<int, List<Comment>> commentsCache,
-  }) async {
-    if (query.isEmpty) return {};
-
-    final lower = query.toLowerCase();
-
-    // 1. Đảm bảo TẤT CẢ comment cho TẤT CẢ post (trong allPosts) đều đã được tải
-    await ensureAllCommentsLoadedForSearch(
-      allPosts: allPosts,
-      commentsCache: commentsCache,
+    // Load all in parallel with error isolation
+    final results = await Future.wait(
+      uncachedPostIds.map((postId) async {
+        try {
+          final comments = await getCommentsByPostId(postId, cache: cache);
+          return MapEntry(postId, comments);
+        } catch (e) {
+          NyLogger.error("❌ Failed to load comments for post $postId: $e");
+          return MapEntry(postId, <Comment>[]);
+        }
+      }),
     );
-    NyLogger.info("✅ Hoàn tất tải comment cho tìm kiếm.");
 
-    // 2. Lọc
-    final matchingPostIds = <int>{};
-    commentsCache.forEach((postId, comments) {
-      final hasMatch = comments.any((c) =>
-      (c.name?.toLowerCase().contains(lower) ?? false) ||
-          (c.email?.toLowerCase().contains(lower) ?? false) ||
-          (c.body?.toLowerCase().contains(lower) ?? false));
-
-      if (hasMatch) {
-        matchingPostIds.add(postId);
-      }
-    });
-
-    return matchingPostIds;
-  }
-
-  static Future<void> ensureAllCommentsLoadedForSearch({
-    required List<Post> allPosts,
-    required Map<int, List<Comment>> commentsCache,
-  }) async {
-    NyLogger.info("🔄 Kiểm tra comment cache trước khi tìm kiếm...");
-
-    // Lọc ra những post chưa có comment trong cache
-    final postsToLoad = allPosts.where((p) =>
-    !commentsCache.containsKey(p.id) || commentsCache[p.id]!.isEmpty).toList();
-
-    if (postsToLoad.isEmpty) {
-      NyLogger.info("✅ Tất cả comment đã có trong cache, không cần tải thêm.");
-      return;
+    // Merge results into cache
+    for (final entry in results) {
+      cache[entry.key] = entry.value;
     }
 
-    NyLogger.info("⚡️ Cần tải comment cho ${postsToLoad.length} post chưa có dữ liệu...");
+    NyLogger.info("✅ Batch loading complete");
+    return cache;
+  }
 
-    // Dùng Future.wait để tải song song
-    final futures = postsToLoad.map((p) async {
-      try {
-        final comments = await getCommentsByPostId(p.id);
-        commentsCache[p.id] = comments;
-        NyLogger.info("✅ Tải xong ${comments.length} comment cho post ${p.id}");
-      } catch (e) {
-        NyLogger.error("❌ Lỗi khi tải comment cho post ${p.id}: $e");
-        commentsCache[p.id] = [];
-      }
-    }).toList();
 
-    await Future.wait(futures);
+  /// Helper method to check if a comment matches the query
 
-    NyLogger.info("✅ Đảm bảo toàn bộ comment đã được tải đầy đủ để tìm kiếm.");
+  /// Pre-load all comments for better UX (call on app start or when needed)
+  static Future<Map<int, List<Comment>>> preloadAllComments(
+      List<Post> allPosts,
+      ) async {
+    final postIds = allPosts.map((p) => p.id).toList();
+    NyLogger.info("🚀 Preloading comments for ${postIds.length} posts...");
+
+    return await loadCommentsForPosts(postIds);
   }
 }

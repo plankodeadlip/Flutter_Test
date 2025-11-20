@@ -24,6 +24,7 @@ class _HomePageState extends NyPage<HomePage> {
         //         (request) => request.githubInfo(),
         // );
         // _stars = githubResponse?["stargazers_count"];
+
       };
 
   /// Define the Loading style for the page.

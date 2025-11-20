@@ -1,3 +1,4 @@
+import '/resources/pages/product_page.dart';
 import '/resources/pages/http_methods_page.dart';
 import '/resources/pages/cart_page.dart';
 import '/resources/pages/event_and_listener_page.dart';
@@ -39,10 +40,11 @@ appRouter() => nyRoutes((router) {
       // });
       router.route("/", (context) => HomePage(), initialRoute: true);
       router.add(NotFoundPage.path).unknownRoute();
-      router.route("/first", (context) => HomePage());
-      router.route("/second", (context) => ProfilePage());
-      router.route("/third", (context)=> SettingPage());
-      router.route("/cart_event", (context)=> EventAndListenerPage());
-      router.route("/cart", (context)=> CartPage());
-      router.route("/http_method", (context)=> HttpMethodsPage());
+      router.add(HomePage.path);
+      router.add(ProfilePage.path);
+      router.add(EventAndListenerPage.path);
+      router.add(CartPage.path);
+      router.add(HttpMethodsPage.path);
+      router.add(ProductPage.path);
+      router.add(SettingPage.path);
 });

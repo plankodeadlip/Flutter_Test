@@ -7,7 +7,9 @@ import '../../app/events/and_listener_event.dart';
 import '../widgets/productCardWidget.dart';
 
 class CartPage extends NyStatefulWidget {
-  CartPage({super.key});
+  static RouteView path = ("/cart", (_) => CartPage());
+
+  CartPage({super.key}) : super(child: () => _CartPageState());
 
   @override
   createState() => _CartPageState();
@@ -76,10 +78,10 @@ class _CartPageState extends NyPage<CartPage> {
                               crossAxisCount: 2,
                               crossAxisSpacing: 8,
                               mainAxisSpacing: 8,
-                              childAspectRatio: 0.42),
+                              childAspectRatio: 0.7),
                       itemCount: items.length,
                       itemBuilder: (context, index) {
-                        return productCard(product: items[index]);
+                        return productCard(product: items[index], isAdded: true);
                       },
                     ),
                   ),

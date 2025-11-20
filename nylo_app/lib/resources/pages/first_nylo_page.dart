@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_app/app/events/eventHandler.dart';
+import 'package:flutter_app/resources/pages/second_nylo_page.dart';
+import 'package:flutter_app/resources/pages/third_nylo_page.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../app/controllers/home_controller_controller.dart';
+import 'event_and_listener_page.dart';
+import 'http_methods_page.dart';
 
 class HomePage extends NyStatefulWidget<HomeControllerController> {
-  HomePage({super.key});
+  static RouteView path = ("/first", (_) => HomePage());
+
+  HomePage({super.key}) : super(child: () => _HomePageState());
 
   @override
   createState() => _HomePageState();
@@ -21,8 +27,6 @@ class _HomePageState extends NyPage<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final baseUrl = getEnv('API_BASE_URL');
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -54,8 +58,7 @@ class _HomePageState extends NyPage<HomePage> {
                     event<ButtonPressedEvent>();
                     widget.controller.counterIncrease();
                     updateState(() {});
-                    routeTo("/second", data: {"name": "Trần Huy Hùng"});
-                    print(baseUrl);
+                    routeTo((ProfilePage.path), data: {"name": "Trần Huy Hùng"});
                   },
                   style: ElevatedButton.styleFrom(padding: EdgeInsets.zero),
                   child: Container(
@@ -76,7 +79,7 @@ class _HomePageState extends NyPage<HomePage> {
                   onPressed: () {
                     widget.controller.counterIncrease();
                     updateState(() {});
-                    routeTo("/third",
+                    routeTo(SettingPage.path,
                         data: {"status": "Route từ page thứ nhất"});
                   },
                   style: ElevatedButton.styleFrom(padding: EdgeInsets.zero),
@@ -101,7 +104,7 @@ class _HomePageState extends NyPage<HomePage> {
                   onPressed: () {
                     widget.controller.counterIncrease();
                     updateState(() {});
-                    routeTo("/cart_event");
+                    routeTo(EventAndListenerPage.path);
                   },
                   style: ElevatedButton.styleFrom(padding: EdgeInsets.zero),
                   child: Container(
@@ -125,7 +128,7 @@ class _HomePageState extends NyPage<HomePage> {
                   onPressed: () {
                     widget.controller.counterIncrease();
                     updateState(() {});
-                    routeTo("/http_method");
+                    routeTo(HttpMethodsPage.path);
                   },
                   style: ElevatedButton.styleFrom(padding: EdgeInsets.zero),
                   child: Container(

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/resources/pages/third_nylo_page.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 import '../../app/controllers/home_controller_controller.dart';
 import '../../app/events/eventHandler.dart';
 
 class ProfilePage extends NyStatefulWidget<HomeControllerController> {
-  ProfilePage({super.key});
+  static RouteView path = ("/profile", (_) => ProfilePage());
+
+  ProfilePage({super.key}) : super(child: () => _ProfilePageState());
 
   @override
   createState() => _ProfilePageState();
@@ -85,7 +88,7 @@ class _ProfilePageState extends NyPage<ProfilePage> {
                     widget.controller.counterIncrease();
                       updateState((){
                       });
-                      routeTo("/third",
+                      routeTo(SettingPage.path,
                       data: {"status": "Route từ page thứ hai"});},
                   style: ElevatedButton.styleFrom(padding: EdgeInsets.zero),
                   child: Container(

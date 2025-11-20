@@ -5,17 +5,16 @@ import 'package:nylo_framework/nylo_framework.dart';
 import '/app/controllers/controller.dart';
 
 class HttpMethodsController extends Controller {
-  final ApiService _api = ApiService();
+  final _api = ApiService();
 
   List<Post> posts = [];
   List<Post> allPosts = [];
-  final int pageSize = 10;
-  List<Post> filteredPosts = [];
+  int pageSize = 10;
+
 
   /// Lưu comment của từng post
   Map<int, List<Comment>> commentsByPost = {};
-  /// Lưu danh sách comment đã lọc theo từ khóa (cho search)
-  Map<int, List<Comment>> filteredCommentsByPost = {};
+
   /// Lưu số lượng comment của từng post
   Map<int, int> commentsCountByPost = {};
 
@@ -23,35 +22,62 @@ class HttpMethodsController extends Controller {
   //  HTTP METHODS
   // ---------------------------------------------------
 
-  Future<List<Post>> getMethod({int page = 1}) async {
+  Future<List<Post>> getMethod({required int page, required int limit}) async {
     try {
-      if (allPosts.isEmpty) {
-        final data = await _api.getRequest();
-        if (data != null) {
-          allPosts = (data as List).map((e) => Post.fromJson(e)).toList();
-          NyLogger.info("✅ GET thành công: ${allPosts.length} bài viết từ API");
+
+      final response = await _api.getRequest(page: page, limit: 10);
+
+      if (response!.isEmpty) {
+        NyLogger.info("⚠️ No posts found for page $page");
+
+        // convert API -> Post
+
+        // nếu là trang đầu tiên → reset
+        if (page == 1) {
+          posts = [];
+          allPosts = [];
+
         }
-
-        // chỉ load số lượng comment, không load body
-        await loadCommentsCountForPosts(allPosts);
-      }
-
-      final startIndex = (page - 1) * pageSize;
-      final endIndex = (startIndex + pageSize).clamp(0, allPosts.length);
-
-      if (startIndex >= allPosts.length) {
-        NyLogger.info("⚠️ Không còn dữ liệu để tải (trang $page)");
         return [];
       }
 
-      posts = allPosts.sublist(0, endIndex);
-      NyLogger.info("📄 Trang $page - hiển thị ${posts.length}/${allPosts.length} bài");
-      return posts;
+      final newPosts = response.map((e) => Post.fromJson(e)).toList();
+
+      if (page == 1) {
+        // Reset khi load trang đầu
+        posts = List.from(newPosts);      // Copy mới
+        allPosts = List.from(newPosts);
+        NyLogger.info("✅ Loaded ${newPosts.length} posts (page 1, RESET)");
+      } else {
+        final existingIds = posts.map((p) => p.id).toSet();
+        final uniqueNewPosts = newPosts.where((p) => !existingIds.contains(p.id)).toList();
+
+        final duplicateCount = newPosts.length - uniqueNewPosts.length;
+
+        if (uniqueNewPosts.isEmpty) {
+          NyLogger.info("⚠️ All ${newPosts.length} posts from page $page are duplicates!");
+          return [];
+        }
+
+        if (duplicateCount > 0) {
+          NyLogger.info("⚠️ Found $duplicateCount duplicates in page $page");
+        }
+
+        // Append khi load thêm
+        posts.addAll(uniqueNewPosts);
+        allPosts.addAll(uniqueNewPosts);
+        NyLogger.info("✅ Loaded ${newPosts.length} posts (page $page, total: ${allPosts.length})");
+      }
+      return newPosts;
     } catch (e) {
       NyLogger.error("❌ GET REQUEST thất bại: $e");
+      if (page == 1) {
+        posts = [];allPosts = [];
+      }
       return [];
     }
   }
+
 
   Future<bool> postMethod({
     required String title,
@@ -118,6 +144,7 @@ class HttpMethodsController extends Controller {
         allPosts.removeWhere((p) => p.id == postId);
         posts.removeWhere((p) => p.id == postId);
         commentsByPost.remove(postId);
+        commentsCountByPost.remove(postId);
         NyLogger.info("🗑️ DELETE thành công - Đã xóa post ID $postId");
         return true;
       }
@@ -134,114 +161,62 @@ class HttpMethodsController extends Controller {
   //  COMMENT HANDLING
   // ---------------------------------------------------
 
-  Future<void> getComments(int postId) async {
-    // toggle hide
-    if (commentsByPost.containsKey(postId) && commentsByPost[postId]!.isNotEmpty) {
-      commentsByPost[postId] = [];
-      filteredCommentsByPost[postId] = [];
-      NyLogger.info("👁️ Ẩn comments cho post $postId");
-      return;
-    }
+  Future<void> loadCommentsCountForPosts(List<Post> posts) async {
+    if (posts.isEmpty) return;
 
     try {
-      NyLogger.info("🔄 Đang tải comments cho post $postId...");
-      final comments = await Comment.getCommentsByPostId(postId);
+      // Load tất cả comments một lần
+      final allComments = await _api.getAllComments();
 
-      commentsByPost[postId] = comments;
-      filteredCommentsByPost[postId] = comments;
-      commentsCountByPost[postId] = comments.length;
+      if (allComments == null || allComments.isEmpty) {
+        NyLogger.info("⚠️ No comments found");
+        return;
+      }
 
-      NyLogger.info("✅ Đã tải ${comments.length} comments cho post $postId");
+      // Group comments by postId
+      final Map<int, int> counts = {};
+      for (var comment in allComments) {
+        final postId = int.tryParse(comment['postId']?.toString() ?? '');
+        if (postId != null) {
+          counts[postId] = (counts[postId] ?? 0) + 1;
+        }
+      }
+
+      // Update counts cho các posts hiện tại
+      for (var post in posts) {
+        commentsCountByPost[post.id] = counts[post.id] ?? 0;
+      }
+
+      NyLogger.info("✅ Loaded comment counts for ${posts.length} posts");
     } catch (e) {
-      NyLogger.error("❌ Lỗi khi tải comments cho post $postId: $e");
+      NyLogger.error("❌ Error loading comments count: $e");
+    }
+  }
+
+  Future<void> loadCommentsForPost(int postId) async {
+    if (commentsByPost.containsKey(postId) && commentsByPost[postId]!.isNotEmpty) return; // đã load rồi
+    try {
+      final comments = await Comment.getCommentsByPostId(postId);
+      commentsByPost[postId] = comments;
+      commentsCountByPost[postId] = comments.length;
+      NyLogger.info("✅ Đã tải ${comments.length} comment cho post $postId");
+    } catch (e) {
+      NyLogger.error("❌ Lỗi khi tải comment cho post $postId: $e");
       commentsByPost[postId] = [];
-      filteredCommentsByPost[postId] = [];
       commentsCountByPost[postId] = 0;
     }
   }
 
+  Future<void> toggleComments(int postId) async {
+    if (commentsByPost.containsKey(postId) && commentsByPost[postId]!.isNotEmpty) {
+      // hide comment
+      commentsByPost[postId] = [];
+    } else {
+      await loadCommentsForPost(postId);
+    }
+  }
+
   /// Tìm kiếm comment theo name/email/body
-  void searchComments(int postId, String query) {
-    if (!commentsByPost.containsKey(postId)) return;
-
-    if (query.isEmpty) {
-      filteredCommentsByPost[postId] = commentsByPost[postId] ?? [];
-      return;
-    }
-
-    final lower = query.toLowerCase();
-    filteredCommentsByPost[postId] = commentsByPost[postId]!
-        .where((c) =>
-    c.name!.toLowerCase().contains(lower) ||
-        c.email!.toLowerCase().contains(lower) ||
-        c.body!.toLowerCase().contains(lower))
-        .toList();
-  }
-
-  /// Chỉ load số lượng comment, không load nội dung
-  Future<void> loadCommentsCountForPosts(List<Post> posts) async {
-    try {
-      commentsByPost.clear();
-      // Tạo danh sách futures để chạy song song
-      final futures = posts.map((post) async {
-        final comments = await Comment.getCommentsByPostId(post.id);
-        commentsCountByPost[post.id] = comments.length;
-      }).toList();
-
-      await Future.wait(futures); // chạy song song tất cả
-      NyLogger.info("✅ Đã tải xong toàn bộ comment count cho ${posts.length} post.");
-    } catch (e) {
-      NyLogger.error("❌ Lỗi khi tải comment count: $e");
-    }
-  }
-
-  Future<List<Post>> searchPostsWithComments(String query) async {
-    if (query.isEmpty) return posts;
-
-    final lower = query.toLowerCase();
-
-    // 1️⃣ Lọc theo title/body
-    final localFiltered = posts.where((post) {
-      final titleMatch = (post.title ?? '').toLowerCase().contains(lower);
-      final bodyMatch = (post.body ?? '').toLowerCase().contains(lower);
-      return titleMatch || bodyMatch;
-    }).toList();
-
-    // 2️⃣ Tìm trong comment (tự động tải nếu chưa có)
-    List<int> commentMatchedPostIds = [];
-
-    for (var post in posts) {
-      // Nếu comment chưa được tải -> tải comment
-      if (!commentsByPost.containsKey(post.id)) {
-        final comments = await Comment.getCommentsByPostId(post.id);
-        commentsByPost[post.id] = comments;
-        commentsCountByPost[post.id] = comments.length;
-      }
-
-      final comments = commentsByPost[post.id] ?? [];
-      final hasMatch = comments.any((cmt) {
-        return (cmt.name ?? '').toLowerCase().contains(lower) ||
-            (cmt.email ?? '').toLowerCase().contains(lower) ||
-            (cmt.body ?? '').toLowerCase().contains(lower);
-      });
-
-      if (hasMatch) {
-        commentMatchedPostIds.add(post.id);
-      }
-    }
-
-    // 3️⃣ Gom kết quả
-    final allMatchedIds = {
-      ...localFiltered.map((p) => p.id),
-      ...commentMatchedPostIds,
-    };
-
-    // 4️⃣ Trả về danh sách post tương ứng
-    return posts.where((p) => allMatchedIds.contains(p.id)).toList();
-  }
-
-
-
 
   // ---------------------------------------------------
   //  UTILITY
@@ -251,9 +226,73 @@ class HttpMethodsController extends Controller {
     posts.clear();
     allPosts.clear();
     commentsByPost.clear();
-    filteredCommentsByPost.clear();
     commentsCountByPost.clear();
   }
+
+  void clearCache() {
+    posts.clear();
+    allPosts.clear();
+    commentsByPost.clear();
+    commentsCountByPost.clear();
+    NyLogger.info("🗑️ Cache cleared");
+  }
+
+  void checkForDuplicates() {
+    // Check posts
+    final postsIds = posts.map((p) => p.id).toList();
+    final postsUniqueIds = postsIds.toSet();
+
+    if (postsIds.length != postsUniqueIds.length) {
+      final duplicateCount = postsIds.length - postsUniqueIds.length;
+      NyLogger.error("⚠️ FOUND $duplicateCount DUPLICATES in posts list!");
+    } else {
+      NyLogger.info("✅ posts: No duplicates (${posts.length} unique)");
+    }
+
+    // Check allPosts
+    final allPostsIds = allPosts.map((p) => p.id).toList();
+    final allPostsUniqueIds = allPostsIds.toSet();
+
+    if (allPostsIds.length != allPostsUniqueIds.length) {
+      final duplicateCount = allPostsIds.length - allPostsUniqueIds.length;
+      NyLogger.error("⚠️ FOUND $duplicateCount DUPLICATES in allPosts list!");
+    } else {
+      NyLogger.info("✅ allPosts: No duplicates (${allPosts.length} unique)");
+    }
+  }
+
+  /// Remove duplicates from posts list (emergency fix)
+  void removeDuplicates() {
+    // Clean posts
+    final uniquePosts = <int, Post>{};
+    for (var post in posts) {
+      uniquePosts[post.id] = post;
+    }
+    final beforePostsCount = posts.length;
+    posts = uniquePosts.values.toList();
+
+    if (beforePostsCount != posts.length) {
+      NyLogger.info("🧹 Removed ${beforePostsCount - posts.length} duplicates from posts");
+    }
+
+    // Clean allPosts
+    final uniqueAllPosts = <int, Post>{};
+    for (var post in allPosts) {
+      uniqueAllPosts[post.id] = post;
+    }
+    final beforeAllPostsCount = allPosts.length;
+    allPosts = uniqueAllPosts.values.toList();
+
+    if (beforeAllPostsCount != allPosts.length) {
+      NyLogger.info("🧹 Removed ${beforeAllPostsCount - allPosts.length} duplicates from allPosts");
+    }
+
+    if (beforePostsCount == posts.length && beforeAllPostsCount == allPosts.length) {
+      NyLogger.info("✅ No duplicates to remove");
+    }
+  }
+
+
 
   bool get hasMoreData => posts.length < allPosts.length;
   int get totalPosts => allPosts.length;

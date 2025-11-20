@@ -6,12 +6,16 @@ class Post extends Model {
   String? title;
   String? body;
   final int userId;
+  final int cmtCount;
+
 
   Post({
     required this.id,
     this.title,
     this.body,
     required this.userId,
+    required this.cmtCount,
+
   });
 
   // 🧩 Tạo Post từ JSON
@@ -32,6 +36,10 @@ class Post extends Model {
       userId: json['userId'] is int
           ? json['userId']
           : int.tryParse(json['userId']?.toString() ?? '0') ?? 0,
+      cmtCount: json['commentCount'] is int
+          ? json['commentCount']
+          : int.tryParse(json['commentCount']?.toString() ?? '0') ?? 0,
+
     );
   }
 
@@ -42,7 +50,9 @@ class Post extends Model {
         "title": title,
         "body": body,
         "userId": userId,
-      };
+    "commentCount": cmtCount,
+
+  };
 
   // 🧩 Hiển thị dễ hiểu khi debug hoặc log
   @override
@@ -73,13 +83,13 @@ class Post extends Model {
           return [];
         }
 
-        NyLogger.info("Response data: $result");
+        NyLogger.info("Response data: ${result.runtimeType}");
 
-        final data = (result is List) ? result : (result['data'] ?? []);
+        final dataList = result is List ? result : [];
 
         allPosts.clear();
         allPosts.addAll(
-          data
+          dataList
               .map<Post>((e) => Post.fromJson(Map<String, dynamic>.from(e)))
               .toList(),
         );

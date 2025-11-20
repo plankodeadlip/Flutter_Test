@@ -4,9 +4,12 @@ import 'package:flutter/cupertino.dart';
 
 import '../../app/events/and_listener_event.dart';
 import '../widgets/productCardWidget.dart';
+import 'cart_page.dart';
 
 class EventAndListenerPage extends NyStatefulWidget {
-  EventAndListenerPage({super.key});
+  static RouteView path = ("/profile", (_) => EventAndListenerPage());
+
+  EventAndListenerPage({super.key}) : super(child: () => _EventAndListenerPageState());
 
   @override
   createState() => _EventAndListenerPageState();
@@ -118,7 +121,7 @@ class _EventAndListenerPageState extends NyPage<EventAndListenerPage> {
           trailing: IconButton(
               onPressed: (){
                 updateState((){});
-                routeTo("/cart");
+                routeTo(CartPage.path);
               }, 
               icon: Icon(CupertinoIcons.cart, color: CupertinoColors.activeBlue, size: 25,)
           ),
@@ -141,6 +144,7 @@ class _EventAndListenerPageState extends NyPage<EventAndListenerPage> {
                 itemBuilder: (context, index) {
                   return productCard(
                     product: _products[index],
+                    isAdded: false,
                   );
                 },
               ),
