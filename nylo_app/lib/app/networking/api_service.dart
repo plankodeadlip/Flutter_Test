@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:dio/io.dart';
 import 'package:flutter/material.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-import '../models/comment.dart';
 import '../models/post.dart';
 import '/config/decoders.dart';
 import 'package:nylo_framework/nylo_framework.dart';

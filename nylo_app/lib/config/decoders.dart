@@ -46,7 +46,6 @@ final Map<Type, dynamic> modelDecoders = {
 final Map<Type, dynamic> apiDecoders = {
   ApiService: () => ApiService(),
 
-  // ...
 };
 
 /* Controller Decoders
