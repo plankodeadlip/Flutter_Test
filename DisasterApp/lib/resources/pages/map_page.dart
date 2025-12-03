@@ -1,0 +1,111 @@
+import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:nylo_framework/nylo_framework.dart';
+import 'package:geolocator/geolocator.dart';
+import '../../app/controllers/map_controller.dart' as CustomController;
+import '../widgets/disaster_list_view_widget.dart';
+import '../widgets/map_view_widget.dart';
+
+class MapPage extends NyStatefulWidget {
+  static RouteView path = ("/map", (_) => MapPage());
+  MapPage({super.key}) : super(child: () => _MapPageState());
+}
+
+class _MapPageState extends NyPage<MapPage> with TickerProviderStateMixin {
+  late CustomController.MapController _controller;  // ✅ Custom Controller
+  late TabController _tabController;
+  LatLng? myLocation;
+
+  @override
+  get init => () async {
+    _controller = CustomController.MapController();
+    await _controller.construct(context);
+    _tabController = TabController(length: 2, vsync: this);
+    await _getLocation();
+    await _controller.initialize();
+    setState(() {});
+  };
+
+  Future<void> _getLocation() async {
+    try {
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        print('⚠️ Location services are disabled');
+        return;
+      }
+
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          print('⚠️ Location permissions denied');
+          return;
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        print('⚠️ Location permissions permanently denied');
+        return;
+      }
+
+      Position pos = await Geolocator.getCurrentPosition();
+      myLocation = LatLng(pos.latitude, pos.longitude);
+      print('📍 Location: ${pos.latitude}, ${pos.longitude}');
+    } catch (e) {
+      print('❌ Error getting location: $e');
+    }
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget view(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Theo dõi thảm họa"),
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: [
+            Tab(icon: Icon(Icons.map), text: "Bản đồ"),
+            Tab(icon: Icon(Icons.list), text: "Danh sách"),
+          ],
+        ),
+      ),
+      body: _controller.isLoading
+          ?  _buildLoadingView()
+          : TabBarView(
+        controller: _tabController,
+        physics: NeverScrollableScrollPhysics(),
+        children: [
+          // ✅ Fix: Sử dụng class constructor đúng cách
+          MapView(
+            controller: _controller,
+            myLocation: myLocation,
+            onRefresh: () => setState(() {}),
+          ),
+          DisasterListView(
+            controller: _controller,
+            onRefresh: () => setState(() {}),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLoadingView() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CircularProgressIndicator(),
+          SizedBox(height: 16),
+          Text('Đang tải dữ liệu...'),
+        ],
+      ),
+    );
+  }
+}
