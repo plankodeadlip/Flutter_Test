@@ -13,14 +13,22 @@ class MapPage extends NyStatefulWidget {
 
 class _MapPageState extends NyPage<MapPage> with TickerProviderStateMixin {
   late CustomController.MapController _controller;  // ✅ Custom Controller
-  late TabController _tabController;
+  TabController? _tabController;
   LatLng? myLocation;
+  LatLng? _goToLocation;
+
+
+  @override
+  void initState() {
+    super.initState();
+    // 🔑 Synchronously initialize TabController here!
+    _tabController = TabController(length: 2, vsync: this);
+  }
 
   @override
   get init => () async {
     _controller = CustomController.MapController();
     await _controller.construct(context);
-    _tabController = TabController(length: 2, vsync: this);
     await _getLocation();
     await _controller.initialize();
     setState(() {});
@@ -58,12 +66,32 @@ class _MapPageState extends NyPage<MapPage> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    _tabController.dispose();
+    _tabController?.dispose();
     super.dispose();
   }
 
+  void _switchToMapWithLocation(LatLng location) {
+    setState(() {
+      _goToLocation = location;
+    });
+    // Chuyển sang tab Map (index 0)
+    _tabController!.animateTo(0);
+  }
+  void _onLocationReached() {
+    setState(() {
+      _goToLocation = null;
+    });
+  }
+
+
   @override
   Widget view(BuildContext context) {
+    if (_tabController == null) {
+      return Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Theo dõi thảm họa"),
@@ -78,7 +106,7 @@ class _MapPageState extends NyPage<MapPage> with TickerProviderStateMixin {
       body: _controller.isLoading
           ?  _buildLoadingView()
           : TabBarView(
-        controller: _tabController,
+        controller: _tabController!,
         physics: NeverScrollableScrollPhysics(),
         children: [
           // ✅ Fix: Sử dụng class constructor đúng cách
@@ -86,10 +114,22 @@ class _MapPageState extends NyPage<MapPage> with TickerProviderStateMixin {
             controller: _controller,
             myLocation: myLocation,
             onRefresh: () => setState(() {}),
+            goToLocation: _goToLocation,
+            onLocationReached: _onLocationReached,
           ),
           DisasterListView(
             controller: _controller,
             onRefresh: () => setState(() {}),
+            onGoToLocation: (location) {
+              // Set location khi người dùng chọn "Xem trên bản đồ"
+              setState(() {
+                _goToLocation = location;
+              });
+            },
+            onSwitchToMapView: () {
+              // Chuyển sang tab map
+              _tabController!.animateTo(0);
+            },
           ),
         ],
       ),

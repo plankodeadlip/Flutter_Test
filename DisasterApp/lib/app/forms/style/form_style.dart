@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
@@ -11,7 +12,7 @@ class FormStyle extends NyFormStyle {
             decoration: (dynamic data, InputDecoration inputDecoration) =>
                 inputDecoration.copyWith(
               filled: true,
-              fillColor: Colors.grey.shade100,
+              fillColor: CupertinoColors.inactiveGray,
               isDense: true,
               hintText: field.name,
               focusedBorder: OutlineInputBorder(

@@ -1,5 +1,6 @@
 
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -50,7 +51,7 @@ class SvgHelper {
     return Icon(
       Icons.image_not_supported,
       size: width ?? height ?? 24,
-      color: Colors.grey,
+      color: CupertinoColors.inactiveGray,
     );
   }
 
@@ -63,7 +64,7 @@ class SvgHelper {
   }) {
     return CircleAvatar(
       radius: radius,
-      backgroundColor: backgroundColor ?? Colors.grey.shade200,
+      backgroundColor: backgroundColor ?? CupertinoColors.inactiveGray,
       child: buildSvgFromBase64(
         base64String: base64String,
         width: radius * 1.2,

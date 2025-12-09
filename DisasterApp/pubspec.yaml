@@ -36,6 +36,8 @@ dependencies:
   sqflite: ^2.4.2
   path: ^1.9.1
   flutter_svg: ^2.2.3
+  image_picker: ^1.2.1
+  sqlite3_flutter_libs: ^0.5.41
 
 dev_dependencies:
   rename: ^3.1.0
@@ -46,12 +48,12 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-# APP ICON - public/app_icon/icon.png
+# APP ICON - public/app_icon/logo.png
 # Build icons: "dart run flutter_launcher_icons"
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "public/app_icon/icon.png"
+  image_path: "public/app_icon/logo.png"
   remove_alpha_ios: true
 
 # RENAME YOUR PROJECT

@@ -1,19 +1,22 @@
 import 'package:nylo_framework/nylo_framework.dart';
+import 'disaster_image.dart';
 
 class Disaster extends Model {
   final int? id;
   final String name;
   final String description;
-  final typeId;
+  final int typeId;
   final double lon;
   final double lat;
-  final DateTime createAt;
-  final DateTime updateAt;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
-  // JOIN ELEMENT
+  // JOIN ELEMENTS
   final String? typeName;
   final String? typeImage;
-  final List<String>? imagePaths;
+
+  // Danh sách ảnh (DisasterImage objects)
+  final List<DisasterImage>? images;
 
   Disaster({
     this.id,
@@ -22,11 +25,11 @@ class Disaster extends Model {
     required this.typeId,
     required this.lon,
     required this.lat,
-    required this.createAt,
-    required this.updateAt,
+    required this.createdAt,
+    required this.updatedAt,
     this.typeName,
     this.typeImage,
-    this.imagePaths,
+    this.images,
   });
 
   factory Disaster.fromMap(Map<String, dynamic> map) {
@@ -37,24 +40,24 @@ class Disaster extends Model {
       typeId: map['type_id'] as int,
       lon: map['lon'] as double,
       lat: map['lat'] as double,
-      createAt: DateTime.parse(map['created_at'] as String),
-      updateAt: DateTime.parse(map['updated_at'] as String),
-      // Thông tin từ JOIN query
+      createdAt: DateTime.parse(map['created_at'] as String),
+      updatedAt: DateTime.parse(map['updated_at'] as String),
       typeName: map['type_name'] as String?,
       typeImage: map['type_image'] as String?,
+      images: null, // Images được load riêng
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      if (id != null) 'id': id, // Chỉ thêm id nếu đã tồn tại
+      if (id != null) 'id': id,
       'name': name,
       'description': description,
       'type_id': typeId,
       'lon': lon,
       'lat': lat,
-      'created_at': createAt.toIso8601String(),
-      'updated_at': updateAt.toIso8601String(),
+      'created_at': createdAt.toIso8601String(),
+      'updated_at': updatedAt.toIso8601String(),
     };
   }
 
@@ -66,17 +69,17 @@ class Disaster extends Model {
       'type_id': typeId,
       'lon': lon,
       'lat': lat,
-      'created_at': createAt.toIso8601String(),
-      'updated_at': updateAt.toIso8601String(),
+      'created_at': createdAt.toIso8601String(),
+      'updated_at': updatedAt.toIso8601String(),
       if (typeName != null) 'type_name': typeName,
       if (typeImage != null) 'type_image': typeImage,
-      if (imagePaths != null) 'image_paths': imagePaths,
+      if (images != null) 'images': images!.map((img) => img.toJson()).toList(),
     };
   }
 
   @override
   String toString() {
-    return 'Disaster{id: $id, name: $name, type: $typeName}';
+    return 'Disaster{id: $id, name: $name, type: $typeName, images: ${images?.length ?? 0}}';
   }
 
   Disaster copyWith({
@@ -90,7 +93,7 @@ class Disaster extends Model {
     DateTime? updatedAt,
     String? typeName,
     String? typeImage,
-    List<String>? imagePaths,
+    List<DisasterImage>? images,
   }) {
     return Disaster(
       id: id ?? this.id,
@@ -99,15 +102,13 @@ class Disaster extends Model {
       typeId: typeId ?? this.typeId,
       lon: lon ?? this.lon,
       lat: lat ?? this.lat,
-      createAt: createdAt ?? this.createAt,
-      updateAt: updatedAt ?? this.updateAt,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
       typeName: typeName ?? this.typeName,
       typeImage: typeImage ?? this.typeImage,
-      imagePaths: imagePaths ?? this.imagePaths,
+      images: images ?? this.images,
     );
   }
 
   static fromJson(data) {}
-
-
 }
