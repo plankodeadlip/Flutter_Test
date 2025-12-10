@@ -11,7 +11,7 @@ class DisasterDetailWidget {
     required Disaster disaster,
   }) async {
     // Hiển thị loading nhẹ hoặc chờ dữ liệu
-    final detailedDisaster = await controller.getDisasterDetails(disaster.id!);
+    final detailedDisaster = await controller.loadDisasterDetails(disaster.id!);
     if (detailedDisaster == null) return;
     final selectedDisasterType = controller.getDisasterType(detailedDisaster.typeId);
 

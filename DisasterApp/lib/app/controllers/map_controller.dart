@@ -13,6 +13,7 @@ class MapController extends Controller {
   List<DisasterType> disasterTypes = [];
   List<Disaster> disasters = [];
   bool isLoading = false;
+  Disaster? selectedDisaster;
 
   int? filterTypeId;
   String? searchQuery;
@@ -41,6 +42,7 @@ class MapController extends Controller {
       await DataImportService().importDisasterTypes();
     }
   }
+
 
   Future<void> loadDisasterTypes() async {
     try {
@@ -196,9 +198,11 @@ class MapController extends Controller {
   }
 
   // Bổ sung phương thức để lấy chi tiết một thảm họa
-  Future<Disaster?> getDisasterDetails(int id) async {
+  Future<Disaster?> loadDisasterDetails(int id) async { // Đổi tên phương thức để rõ ràng hơn
     try {
       final Map<String, dynamic>? result = await DBHelper().getDisasterById(id);
+
+      selectedDisaster = null; // Reset trước khi load
 
       if (result != null) {
         final disaster = Disaster.fromMap(result);
@@ -209,13 +213,22 @@ class MapController extends Controller {
         // Gán ảnh vào model
         final disasterWithImages = disaster.copyWith(images: images);
 
+        // ⭐️ CẬP NHẬT TRẠNG THÁI:
+        selectedDisaster = disasterWithImages;
+
         print('✅ [MAP] Loaded disaster details: ${disaster.name} with ${images.length} images');
+
+        // Cập nhật state nếu cần thiết
+        updateState('disaster_details_loaded');
 
         return disasterWithImages;
       }
+
+      updateState('disaster_details_loaded'); // Cập nhật state ngay cả khi null
       return null;
     } catch (e) {
       print('❌ [MAP] Error getting disaster details: $e');
+      updateState('disaster_details_loaded');
       return null;
     }
   }

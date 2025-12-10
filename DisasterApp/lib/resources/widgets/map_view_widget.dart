@@ -31,19 +31,16 @@ class MapView extends StatefulWidget {
 
 class _MapViewState extends NyState<MapView> {
   late FlutterMapController.MapController _mapController;
+  late CustomController.MapController controller;
   LatLng? _highlightedLocation;
   bool _isMapReady = false;
-
-
 
   @override
   void initState() {
     super.initState();
-
+    controller = CustomController.MapController();
     _mapController = FlutterMapController.MapController();
-
   }
-
 
   @override
   void didUpdateWidget(covariant MapView oldWidget) {
@@ -52,7 +49,6 @@ class _MapViewState extends NyState<MapView> {
     // Khi MapPage gửi vị trí mới xuống
     if (widget.goToLocation != null &&
         widget.goToLocation != oldWidget.goToLocation) {
-
       print("📍 Nhận vị trí mới: ${widget.goToLocation}");
 
       // Zoom đến vị trí
@@ -61,7 +57,7 @@ class _MapViewState extends NyState<MapView> {
       // Báo MapPage rằng đã xong
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (widget.onLocationReached != null) {
-          widget.onLocationReached!();   // KHÔNG bị lỗi build nữa
+          widget.onLocationReached!(); // KHÔNG bị lỗi build nữa
         }
       });
     }
@@ -70,8 +66,6 @@ class _MapViewState extends NyState<MapView> {
   void _goTo(LatLng target) {
     _mapController.move(target, 15.0);
   }
-
-
 
   Future<void> _goToMyLocation() async {
     try {
@@ -111,7 +105,6 @@ class _MapViewState extends NyState<MapView> {
     });
   }
 
-
   @override
   Widget view(BuildContext context) {
     return Stack(
@@ -140,7 +133,7 @@ class _MapViewState extends NyState<MapView> {
             children: [
               FlutterMapController.TileLayer(
                 urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                userAgentPackageName: 'com.nylo.android',
+                userAgentPackageName: 'com.nylon.android',
               ),
               if (_highlightedLocation != null)
                 FlutterMapController.CircleLayer(
@@ -149,7 +142,7 @@ class _MapViewState extends NyState<MapView> {
                       point: _highlightedLocation!,
                       radius: 100,
                       useRadiusInMeter: true,
-                      color: Colors.blue.withOpacity(0.2),
+                      color: Colors.blue.withValues(alpha: 0.2),
                       borderColor: Colors.blue,
                       borderStrokeWidth: 3,
                     ),
@@ -212,7 +205,8 @@ class _MapViewState extends NyState<MapView> {
                                   ),
                                   child: () {
                                     try {
-                                      if (disasterType != null && disasterType.image.isNotEmpty) {
+                                      if (disasterType != null &&
+                                          disasterType.image.isNotEmpty) {
                                         return Padding(
                                           padding: EdgeInsets.all(8),
                                           child: SvgHelper.buildSvgFromBase64(
@@ -454,13 +448,16 @@ class _MapViewState extends NyState<MapView> {
             ListTile(
               leading: Icon(Icons.edit, color: Colors.orange),
               title: Text('Chỉnh sửa'),
-              onTap: () {
+              onTap: () async {
+                final full = await controller.loadDisasterDetails(disaster.id!);
+
+                if (full == null) return;
                 Navigator.pop(ctx);
                 DisasterDialogWidget.show(
                   context: context,
-                  controller: widget.controller,
+                  controller: controller,
                   isCreate: false,
-                  disaster: disaster,
+                  disaster: full,
                   onSuccess: () {
                     widget.onRefresh();
                     setState(() {});

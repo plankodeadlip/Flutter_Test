@@ -28,6 +28,7 @@ class DisasterListView extends NyStatefulWidget {
 }
 
 class _DisasterListViewState extends NyState<DisasterListView> {
+  late CustomController.MapController controller;
   final dbHelper = DBHelper();
 
   int? _selectedTypeId;
@@ -52,6 +53,7 @@ class _DisasterListViewState extends NyState<DisasterListView> {
   @override
   get init => () async {
         super.init();
+        controller = CustomController.MapController();
         await _loadData();
       };
 
@@ -715,13 +717,16 @@ class _DisasterListViewState extends NyState<DisasterListView> {
             ListTile(
               leading: Icon(Icons.edit, color: Colors.orange),
               title: Text('Chỉnh sửa'),
-              onTap: () {
+              onTap: () async {
+                final full = await controller.loadDisasterDetails(disaster.id!);
+                if (full == null) return;
+                print("Before edit: disaster.images = ${disaster.images?.length}");
                 Navigator.pop(context);
                 DisasterDialogWidget.show(
                   context: context,
-                  controller: widget.controller,
+                  controller: controller,
                   isCreate: false,
-                  disaster: disaster,
+                  disaster: full,
                   onSuccess: () async {
                     await _loadDisasters();
                     widget.onRefresh();
