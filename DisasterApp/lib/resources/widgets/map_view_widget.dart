@@ -38,7 +38,7 @@ class _MapViewState extends NyState<MapView> {
   @override
   void initState() {
     super.initState();
-    controller = CustomController.MapController();
+    controller = widget.controller;
     _mapController = FlutterMapController.MapController();
   }
 
@@ -115,7 +115,7 @@ class _MapViewState extends NyState<MapView> {
               initialCenter: widget.myLocation ?? LatLng(21.0285, 105.8542),
               initialZoom: 13,
               onLongPress: (tapPosition, point) {
-                widget.controller.selectLocation(point);
+                controller.selectLocation(point);
                 _showCreateDialog(context, point);
               },
               onMapReady: () {
@@ -160,9 +160,9 @@ class _MapViewState extends NyState<MapView> {
                           color: Colors.blue,
                           size: 40,
                         )),
-                  ...widget.controller.disasters.map((disaster) {
+                  ...controller.disasters.map((disaster) {
                     final disasterType =
-                        widget.controller.getDisasterType(disaster.typeId);
+                        controller.getDisasterType(disaster.typeId);
                     final disasterLocation = LatLng(disaster.lat, disaster.lon);
                     final isHighlighted = _highlightedLocation != null &&
                         _highlightedLocation!.latitude == disaster.lat &&
@@ -329,7 +329,7 @@ class _MapViewState extends NyState<MapView> {
             ),
           ),
         ),
-        if (widget.controller.hasSelectedPoint)
+        if (controller.hasSelectedPoint)
           Positioned(
             top: 80,
             left: 20,
@@ -345,15 +345,15 @@ class _MapViewState extends NyState<MapView> {
                     SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        'Đã chọn: ${widget.controller.selectedPoint?.latitude.toStringAsFixed(5)}, '
-                        '${widget.controller.selectedPoint?.longitude.toStringAsFixed(5)}',
+                        'Đã chọn: ${controller.selectedPoint?.latitude.toStringAsFixed(5)}, '
+                        '${controller.selectedPoint?.longitude.toStringAsFixed(5)}',
                         style: TextStyle(
                             fontSize: 12, fontWeight: FontWeight.w500),
                       ),
                     ),
                     IconButton(
                       onPressed: () {
-                        widget.controller.clearSelection();
+                        controller.clearSelection();
                         setState(() {});
                       },
                       icon: Icon(Icons.close, size: 20),
@@ -370,7 +370,7 @@ class _MapViewState extends NyState<MapView> {
   void _showCreateDialog(BuildContext context, LatLng point) {
     DisasterDialogWidget.show(
       context: context,
-      controller: widget.controller,
+      controller: controller,
       isCreate: true,
       disaster: null,
       onSuccess: () {
@@ -383,7 +383,7 @@ class _MapViewState extends NyState<MapView> {
   void _showDetailDialog(BuildContext context, disaster) {
     DisasterDetailWidget.show(
       context: context,
-      controller: widget.controller,
+      controller: controller,
       disaster: disaster,
     );
   }
@@ -494,7 +494,7 @@ class _MapViewState extends NyState<MapView> {
 
                 if (confirm == true) {
                   final success =
-                      await widget.controller.deleteDisaster(disaster.id!);
+                      await controller.deleteDisaster(disaster.id!);
                   if (success) {
                     widget.onRefresh();
                     setState(() {});

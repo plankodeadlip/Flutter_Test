@@ -26,6 +26,7 @@ class _DisasterDialogContent extends StatefulWidget {
 
 class _DisasterDialogContentState extends State<_DisasterDialogContent>
     with WidgetsBindingObserver {
+  late CustomController.MapController controller;
   late TextEditingController nameController;
   late TextEditingController descController;
   int? selectedTypeId;
@@ -37,6 +38,7 @@ class _DisasterDialogContentState extends State<_DisasterDialogContent>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    controller = widget.controller;
 
     nameController = TextEditingController(
       text: widget.isCreate ? '' : widget.disaster!.name,
@@ -168,7 +170,7 @@ class _DisasterDialogContentState extends State<_DisasterDialogContent>
   @override
   Widget build(BuildContext context) {
     final DisasterType? selectedDisasterType = selectedTypeId != null
-        ? widget.controller.getDisasterType(selectedTypeId!)
+        ? controller.getDisasterType(selectedTypeId!)
         : null;
 
     return DraggableScrollableSheet(
@@ -182,7 +184,7 @@ class _DisasterDialogContentState extends State<_DisasterDialogContent>
           DisasterDialogUIHelper.buildHeader(
             context: context,
             isCreate: widget.isCreate,
-            controller: widget.controller,
+            controller: controller,
           ),
 
           // Form
@@ -193,7 +195,7 @@ class _DisasterDialogContentState extends State<_DisasterDialogContent>
                 children: [
                   DisasterDialogUIHelper.buildForm(
                     context: context,
-                    controller: widget.controller,
+                    controller: controller,
                     isCreate: widget.isCreate,
                     disaster: widget.disaster,
                     nameController: nameController,
@@ -233,7 +235,7 @@ class _DisasterDialogContentState extends State<_DisasterDialogContent>
           // Actions
           DisasterDialogUIHelper.buildActions(
             context: context,
-            controller: widget.controller,
+            controller: controller,
             isCreate: widget.isCreate,
             disaster: widget.disaster,
             nameController: nameController,

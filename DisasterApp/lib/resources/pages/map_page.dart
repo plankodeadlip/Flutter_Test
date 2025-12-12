@@ -17,17 +17,11 @@ class _MapPageState extends NyPage<MapPage> with TickerProviderStateMixin {
   LatLng? myLocation;
   LatLng? _goToLocation;
 
-
-  @override
-  void initState() {
-    super.initState();
-    // 🔑 Synchronously initialize TabController here!
-    _tabController = TabController(length: 2, vsync: this);
-  }
-
   @override
   get init => () async {
+    super.init;
     _controller = CustomController.MapController();
+    _tabController = TabController(length: 2, vsync: this);
     await _controller.construct(context);
     await _getLocation();
     await _controller.initialize();

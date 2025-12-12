@@ -99,7 +99,7 @@ class _DisasterListViewState extends NyState<DisasterListView> {
         _disasters = disastersData.map((data) => Disaster.fromMap(data)).toList();
       });
 
-      widget.controller.disasters = _disasters;
+      controller.disasters = _disasters;
     } catch (e) {
       print('❌ Error loading disasters: $e');
       rethrow;
@@ -553,7 +553,7 @@ class _DisasterListViewState extends NyState<DisasterListView> {
         onTap: () {
           DisasterDetailWidget.show(
             context: context,
-            controller: widget.controller,
+            controller: controller,
             disaster: disaster,
           );
         },
@@ -679,7 +679,7 @@ class _DisasterListViewState extends NyState<DisasterListView> {
                 Navigator.pop(context);
                 DisasterDetailWidget.show(
                   context: context,
-                  controller: widget.controller,
+                  controller: controller,
                   disaster: disaster,
                 );
               },
