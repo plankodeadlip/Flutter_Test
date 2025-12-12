@@ -49,7 +49,6 @@ class _AnimatedLoaderState extends State<AnimatedLoader>
 
   @override
   void initState() {
-    super.initState();
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1500),

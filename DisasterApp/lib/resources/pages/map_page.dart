@@ -19,7 +19,6 @@ class _MapPageState extends NyPage<MapPage> with TickerProviderStateMixin {
 
   @override
   get init => () async {
-    super.init;
     _controller = CustomController.MapController();
     _tabController = TabController(length: 2, vsync: this);
     await _controller.construct(context);

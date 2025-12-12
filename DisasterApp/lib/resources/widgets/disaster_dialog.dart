@@ -1,30 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/app/models/disaster_type.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:nylo_framework/nylo_framework.dart';
 import '../../../app/controllers/map_controller.dart' as CustomController;
 import '../../../app/models/disaster.dart';
 import '../../../app/models/disaster_image.dart';
 import'../../helpers/disaster_dialog_UI_helper.dart';
 
 /// Content widget cho DisasterDialog
-class _DisasterDialogContent extends StatefulWidget {
+class _DisasterDialogContent extends NyStatefulWidget {
   final CustomController.MapController controller;
   final bool isCreate;
   final Disaster? disaster;
   final VoidCallback onSuccess;
 
-  const _DisasterDialogContent({
+   _DisasterDialogContent({
+     Key? key,
     required this.controller,
     required this.isCreate,
     this.disaster,
     required this.onSuccess,
-  });
-
-  @override
-  State<_DisasterDialogContent> createState() => _DisasterDialogContentState();
+  }) : super(key: key, child: () =>_DisasterDialogContentState());
 }
 
-class _DisasterDialogContentState extends State<_DisasterDialogContent>
+class _DisasterDialogContentState extends NyState<_DisasterDialogContent>
     with WidgetsBindingObserver {
   late CustomController.MapController controller;
   late TextEditingController nameController;
@@ -34,9 +33,7 @@ class _DisasterDialogContentState extends State<_DisasterDialogContent>
   List<DisasterImage> _existingImages = [];
   Set<int> _imageIdsToRemove = {};
 
-  @override
-  void initState() {
-    super.initState();
+  get init =>() {
     WidgetsBinding.instance.addObserver(this);
     controller = widget.controller;
 
@@ -70,7 +67,7 @@ class _DisasterDialogContentState extends State<_DisasterDialogContent>
     } else {
       print('No existing images found');
     }
-  }
+  };
 
   @override
   void dispose() {
@@ -168,7 +165,7 @@ class _DisasterDialogContentState extends State<_DisasterDialogContent>
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget view(BuildContext context) {
     final DisasterType? selectedDisasterType = selectedTypeId != null
         ? controller.getDisasterType(selectedTypeId!)
         : null;

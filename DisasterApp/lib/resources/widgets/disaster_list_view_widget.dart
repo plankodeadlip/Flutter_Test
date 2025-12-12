@@ -52,7 +52,6 @@ class _DisasterListViewState extends NyState<DisasterListView> {
 
   @override
   get init => () async {
-        super.init();
         controller = CustomController.MapController();
         await _loadData();
       };

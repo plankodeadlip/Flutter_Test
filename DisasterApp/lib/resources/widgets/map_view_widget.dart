@@ -9,24 +9,21 @@ import '../../helpers/svg_helper.dart';
 import 'disaster_detail_widget.dart';
 import 'disaster_dialog.dart';
 
-class MapView extends StatefulWidget {
+class MapView extends NyStatefulWidget {
   final CustomController.MapController controller;
   final LatLng? myLocation;
   final VoidCallback onRefresh;
   final LatLng? goToLocation;
   final VoidCallback? onLocationReached;
 
-  const MapView({
+   MapView({
     Key? key,
     required this.controller,
     required this.myLocation,
     required this.onRefresh,
     this.goToLocation,
     this.onLocationReached,
-  }) : super(key: key);
-
-  @override
-  createState() => _MapViewState();
+   }) : super(key: key, child: () =>_MapViewState());
 }
 
 class _MapViewState extends NyState<MapView> {
@@ -36,11 +33,10 @@ class _MapViewState extends NyState<MapView> {
   bool _isMapReady = false;
 
   @override
-  void initState() {
-    super.initState();
+  get init => () {
     controller = widget.controller;
     _mapController = FlutterMapController.MapController();
-  }
+  };
 
   @override
   void didUpdateWidget(covariant MapView oldWidget) {
