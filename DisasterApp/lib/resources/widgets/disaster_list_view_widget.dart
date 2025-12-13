@@ -17,7 +17,6 @@ class DisasterListView extends NyStatefulWidget {
   // Thêm callback để chuyển tab
   final VoidCallback? onSwitchToMapView;
 
-
   DisasterListView({
     Key? key,
     required this.controller,
@@ -43,6 +42,9 @@ class _DisasterListViewState extends NyState<DisasterListView> {
   TextEditingController _searchController = TextEditingController();
   Timer? _debounceTimer;
 
+  Map<int, DisasterType>? _disasterTypeMap;
+
+
   @override
   void dispose() {
     _searchController.dispose();
@@ -52,7 +54,7 @@ class _DisasterListViewState extends NyState<DisasterListView> {
 
   @override
   get init => () async {
-        controller = CustomController.MapController();
+        controller = widget.controller;
         await _loadData();
       };
 
@@ -63,7 +65,9 @@ class _DisasterListViewState extends NyState<DisasterListView> {
       // Load disaster types từ database
       final typesData = await dbHelper.getDisasterTypes();
       _disasterTypes = typesData.map((e) => DisasterType.fromMap(e)).toList();
-
+      _disasterTypeMap = {
+        for (var type in _disasterTypes) type.id: type
+      };
       // Load disasters với filter
       await _loadDisasters();
     } catch (e) {
@@ -75,7 +79,6 @@ class _DisasterListViewState extends NyState<DisasterListView> {
 
   Future<void> _loadDisasters() async {
     try {
-
       List<Map<String, dynamic>> disastersData;
 
       if (_searchQuery.isNotEmpty) {
@@ -95,7 +98,8 @@ class _DisasterListViewState extends NyState<DisasterListView> {
       }
 
       setState(() {
-        _disasters = disastersData.map((data) => Disaster.fromMap(data)).toList();
+        _disasters =
+            disastersData.map((data) => Disaster.fromMap(data)).toList();
       });
 
       controller.disasters = _disasters;
@@ -112,6 +116,7 @@ class _DisasterListViewState extends NyState<DisasterListView> {
     });
     _loadDisasters();
   }
+
   /// Search với debounce và database query
   void _onSearchChanged(String value) {
     _debounceTimer?.cancel();
@@ -149,7 +154,8 @@ class _DisasterListViewState extends NyState<DisasterListView> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text("Xóa thảm họa"),
-        content: Text("Bạn có chắc chắn muốn xóa thảm họa này?\nTất cả ảnh sẽ bị xóa vĩnh viễn."),
+        content: Text(
+            "Bạn có chắc chắn muốn xóa thảm họa này?\nTất cả ảnh sẽ bị xóa vĩnh viễn."),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
@@ -217,8 +223,8 @@ class _DisasterListViewState extends NyState<DisasterListView> {
       final typeName = _disasterTypes
           .firstWhere(
             (t) => t.id == _selectedTypeId,
-        orElse: () => DisasterType(id: 0, name: 'Unknown', image: ''),
-      )
+            orElse: () => DisasterType(id: 0, name: 'Unknown', image: ''),
+          )
           .name;
       activeFilters.add('Loại: $typeName');
     }
@@ -304,7 +310,9 @@ class _DisasterListViewState extends NyState<DisasterListView> {
                   children: [
                     Icon(
                       _orderBy == 'updated_at'
-                          ? (_ascending ? Icons.arrow_upward : Icons.arrow_downward)
+                          ? (_ascending
+                              ? Icons.arrow_upward
+                              : Icons.arrow_downward)
                           : Icons.update,
                       size: 18,
                     ),
@@ -319,7 +327,9 @@ class _DisasterListViewState extends NyState<DisasterListView> {
                   children: [
                     Icon(
                       _orderBy == 'created_at'
-                          ? (_ascending ? Icons.arrow_upward : Icons.arrow_downward)
+                          ? (_ascending
+                              ? Icons.arrow_upward
+                              : Icons.arrow_downward)
                           : Icons.access_time,
                       size: 18,
                     ),
@@ -334,7 +344,9 @@ class _DisasterListViewState extends NyState<DisasterListView> {
                   children: [
                     Icon(
                       _orderBy == 'name'
-                          ? (_ascending ? Icons.arrow_upward : Icons.arrow_downward)
+                          ? (_ascending
+                              ? Icons.arrow_upward
+                              : Icons.arrow_downward)
                           : Icons.sort_by_alpha,
                       size: 18,
                     ),
@@ -471,8 +483,7 @@ class _DisasterListViewState extends NyState<DisasterListView> {
               label: Text("Xóa tất cả bộ lọc"),
               style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue.shade700,
-                  foregroundColor: Colors.white
-              ),
+                  foregroundColor: Colors.white),
             )
           ]
         ],
@@ -493,17 +504,24 @@ class _DisasterListViewState extends NyState<DisasterListView> {
                 style: TextStyle(
                     fontSize: 13,
                     color: Colors.grey.shade700,
-                    fontWeight: FontWeight.w500
-                ),
+                    fontWeight: FontWeight.w500),
               ),
               Spacer(),
               if (_orderBy == 'updated_at')
-                Text(_ascending ? 'Cũ nhất' : 'Mới nhất',
-                  style: TextStyle(fontSize: 12, color: Colors.grey.shade600,),
+                Text(
+                  _ascending ? 'Cũ nhất' : 'Mới nhất',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey.shade600,
+                  ),
                 )
               else if (_orderBy == 'created_at')
-                Text(_ascending ? 'Tạo cũ -> mới' : 'Tạo mới -> cũ',
-                  style: TextStyle(fontSize: 12, color: Colors.grey.shade600,),
+                Text(
+                  _ascending ? 'Tạo cũ -> mới' : 'Tạo mới -> cũ',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey.shade600,
+                  ),
                 )
               else if (_orderBy == 'name')
                 Text(
@@ -514,30 +532,41 @@ class _DisasterListViewState extends NyState<DisasterListView> {
           ),
         ),
         Expanded(
-            child: RefreshIndicator(
-                child: ListView.builder(
-                    itemCount: _disasters.length,
-                    padding: EdgeInsets.all(10),
-                    itemBuilder: (context, index) {
-                      final disaster = _disasters[index];
-                      return _buildDisasterCard(disaster);
-                    }),
-                onRefresh: () async {
-                  await _loadDisasters();
-                  widget.onRefresh();
-                }))
+          child: NyPullToRefresh(
+            child: (context, item) {
+              final disaster = Disaster.fromMap(item);
+              return _buildDisasterCard(disaster);
+            },
+            data: (int iteration) async {
+              await _loadDisasters(); // load dữ liệu
+              if (iteration > 1) return [];
+              return _disasters.map((d) => d.toMap()).toList();
+            },
+            onRefresh: () async {
+              await _loadDisasters();
+              widget.onRefresh();
+            },
+          ),
+        )
       ],
     );
   }
 
   Widget _buildDisasterCard(dynamic disaster) {
-    final disasterType = _disasterTypes.firstWhere(
-      (type) => type.id == disaster.typeId,
-      orElse: () => DisasterType(id: 0, name: 'Unknown', image: ''),
-    );
+
+    final displayTypeName = disaster.typeName ?? 'Chưa phân loại';
+
+
+    final disasterType = _disasterTypeMap?[disaster.typeId] ??
+        DisasterType(id: 0, name: displayTypeName, image: '');
+
+    print('   - disasterType found: ${disasterType.name}');
+
     final isSearchMatch = _searchQuery.isNotEmpty &&
         (disaster.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-            disaster.description.toLowerCase().contains(_searchQuery.toLowerCase()));
+            disaster.description
+                .toLowerCase()
+                .contains(_searchQuery.toLowerCase()));
 
     return Card(
       margin: EdgeInsets.only(bottom: 12),
@@ -599,7 +628,7 @@ class _DisasterListViewState extends NyState<DisasterListView> {
                             ),
                           ),
                         Text(
-                          disaster.typeName ?? 'Unknown',
+                          disaster.typeName ?? disasterType.name,
                           style: TextStyle(
                             color: Colors.blue.shade900,
                             fontSize: 12,
@@ -628,13 +657,17 @@ class _DisasterListViewState extends NyState<DisasterListView> {
                   disaster.description,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 13, color: Colors.grey.shade700,),
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.grey.shade700,
+                  ),
                 ),
               ],
               SizedBox(height: 10),
               Row(
                 children: [
-                  Icon(Icons.location_on, size: 14, color: Colors.grey.shade600),
+                  Icon(Icons.location_on,
+                      size: 14, color: Colors.grey.shade600),
                   SizedBox(width: 4),
                   Text(
                     "${disaster.lat.toStringAsFixed(4)}, ${disaster.lon.toStringAsFixed(4)}",
@@ -692,7 +725,8 @@ class _DisasterListViewState extends NyState<DisasterListView> {
                 Navigator.pop(context);
 
                 final location = LatLng(disaster.lat, disaster.lon);
-                print('🔍 [LIST] Location: ${location.latitude}, ${location.longitude}');
+                print(
+                    '🔍 [LIST] Location: ${location.latitude}, ${location.longitude}');
 
                 if (widget.onSwitchToMapView != null) {
                   widget.onSwitchToMapView!.call();
@@ -719,7 +753,8 @@ class _DisasterListViewState extends NyState<DisasterListView> {
               onTap: () async {
                 final full = await controller.loadDisasterDetails(disaster.id!);
                 if (full == null) return;
-                print("Before edit: disaster.images = ${disaster.images?.length}");
+                print(
+                    "Before edit: disaster.images = ${disaster.images?.length}");
                 Navigator.pop(context);
                 DisasterDialogWidget.show(
                   context: context,

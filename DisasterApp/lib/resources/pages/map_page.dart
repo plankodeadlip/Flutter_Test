@@ -12,18 +12,18 @@ class MapPage extends NyStatefulWidget {
 }
 
 class _MapPageState extends NyPage<MapPage> with TickerProviderStateMixin {
-  late CustomController.MapController _controller;  // ✅ Custom Controller
+  late CustomController.MapController controller;  // ✅ Custom Controller
   TabController? _tabController;
   LatLng? myLocation;
   LatLng? _goToLocation;
 
   @override
   get init => () async {
-    _controller = CustomController.MapController();
+    controller = CustomController.MapController();
     _tabController = TabController(length: 2, vsync: this);
-    await _controller.construct(context);
+    await controller.construct(context);
     await _getLocation();
-    await _controller.initialize();
+    await controller.initialize();
     setState(() {});
   };
 
@@ -96,7 +96,7 @@ class _MapPageState extends NyPage<MapPage> with TickerProviderStateMixin {
           ],
         ),
       ),
-      body: _controller.isLoading
+      body: controller.isLoading
           ?  _buildLoadingView()
           : TabBarView(
         controller: _tabController!,
@@ -104,14 +104,14 @@ class _MapPageState extends NyPage<MapPage> with TickerProviderStateMixin {
         children: [
           // ✅ Fix: Sử dụng class constructor đúng cách
           MapView(
-            controller: _controller,
+            controller: controller,
             myLocation: myLocation,
             onRefresh: () => setState(() {}),
             goToLocation: _goToLocation,
             onLocationReached: _onLocationReached,
           ),
           DisasterListView(
-            controller: _controller,
+            controller: controller,
             onRefresh: () => setState(() {}),
             onGoToLocation: (location) {
               // Set location khi người dùng chọn "Xem trên bản đồ"

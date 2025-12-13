@@ -10,7 +10,6 @@ class Disaster extends Model {
   final double lat;
   final DateTime createdAt;
   final DateTime updatedAt;
-
   // JOIN ELEMENTS
   final String? typeName;
   final String? typeImage;
@@ -37,7 +36,7 @@ class Disaster extends Model {
       id: map['id'] as int?,
       name: map['name'] as String,
       description: map['description'] as String,
-      typeId: map['type_id'] as int,
+      typeId: map['typeId'] as int,
       lon: map['lon'] as double,
       lat: map['lat'] as double,
       createdAt: DateTime.parse(map['created_at'] as String),
@@ -53,7 +52,7 @@ class Disaster extends Model {
       if (id != null) 'id': id,
       'name': name,
       'description': description,
-      'type_id': typeId,
+      'typeId': typeId,
       'lon': lon,
       'lat': lat,
       'created_at': createdAt.toIso8601String(),
@@ -66,7 +65,7 @@ class Disaster extends Model {
       'id': id,
       'name': name,
       'description': description,
-      'type_id': typeId,
+      'typeId': typeId,
       'lon': lon,
       'lat': lat,
       'created_at': createdAt.toIso8601String(),

@@ -26,7 +26,7 @@ class DBHelper {
     String path = join(await getDatabasesPath(), 'disaster_app.db');
     return await openDatabase(
       path,
-      version: 2,
+      version: 3,
       onCreate: _onCreate,
       onConfigure: (db) async {
         await db.execute('PRAGMA foreign_keys = ON');
@@ -50,12 +50,12 @@ class DBHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
         description TEXT,
-        type_id INTEGER NOT NULL,
+        typeId INTEGER NOT NULL,
         lon REAL NOT NULL,
         lat REAL NOT NULL,
         created_at TEXT NOT NULL,
         updated_at TEXT NOT NULL,
-        FOREIGN KEY(type_id) REFERENCES disaster_types(id) ON DELETE CASCADE
+        FOREIGN KEY(typeId) REFERENCES disaster_types(id) ON DELETE CASCADE
       )
     ''');
 
@@ -297,7 +297,7 @@ class DBHelper {
     List<dynamic> whereArgs = [];
 
     if (typeId != null) {
-      whereConditions.add('d.type_id = ?');
+      whereConditions.add('d.typeId = ?');
       whereArgs.add(typeId);
     }
 
@@ -316,7 +316,7 @@ class DBHelper {
       d.id,
       d.name,
       d.description,
-      d.type_id,
+      d.typeId,
       d.lat,
       d.lon,
       d.created_at,
@@ -324,13 +324,29 @@ class DBHelper {
       dt.name as type_name,
       dt.image as type_image
     FROM disasters d
-    LEFT JOIN disaster_types dt ON d.type_id = dt.id
+    LEFT JOIN disaster_types dt ON d.typeId = dt.id
     $whereClause
     ORDER BY d.$orderBy ${ascending ? 'ASC' : 'DESC'}
     ''';
 
     try {
-      return await db.rawQuery(query, whereArgs);
+      print('🔍 Executing query...');
+      print('📝 Query: $query');
+      print('📝 Args: $whereArgs');
+
+      final results = await db.rawQuery(query, whereArgs);
+
+      print('✅ Query successful! Got ${results.length} results');
+      if (results.isNotEmpty) {
+        print('📊 First result:');
+        print('   - id: ${results.first['id']}');
+        print('   - name: ${results.first['name']}');
+        print('   - typeId: ${results.first['typeId']}');
+        print('   - type_name: ${results.first['type_name']}');
+        print('   - type_image length: ${results.first['type_image']?.toString().length ?? 0}');
+      }
+
+      return results;
     } catch (e) {
       print('❌ Error in getDisastersFilterd: $e');
       rethrow;
@@ -389,7 +405,7 @@ class DBHelper {
     // Index cho type_id (để filter theo loại)
     await db.execute('''
       CREATE INDEX IF NOT EXISTS idx_disasters_type_id 
-      ON disasters(type_id)
+      ON disasters(typeId)
     ''');
 
     // Index cho updated_at (để sort)
@@ -413,15 +429,15 @@ class DBHelper {
     try {
       final db = await database;
       final results = await db.rawQuery('''
-        SELECT type_id, COUNT(*) as count
+        SELECT typeId, COUNT(*) as count
         FROM disasters
-        GROUP BY type_id
+        GROUP BY typeId
       ''');
 
       Map<int, int> counts = {};
       for (var row in results) {
-        if (row['type_id'] != null) {
-          counts[row['type_id'] as int] = row['count'] as int;
+        if (row['typeId'] != null) {
+          counts[row['typeId'] as int] = row['count'] as int;
         }
       }
       return counts;

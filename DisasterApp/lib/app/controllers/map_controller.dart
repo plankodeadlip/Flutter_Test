@@ -114,7 +114,7 @@ class MapController extends Controller {
       final disasterData = {
         'name': name,
         'description': description,
-        'type_id': typeId,
+        'typeId': typeId,
         'lat': selectedPoint!.latitude,
         'lon': selectedPoint!.longitude,
         'created_at': now.toIso8601String(),
@@ -151,7 +151,7 @@ class MapController extends Controller {
       final disasterData = {
         'name': name,
         'description': description,
-        'type_id': typeId,
+        'typeId': typeId,
         'updated_at': DateTime.now().toIso8601String(),
       };
 
